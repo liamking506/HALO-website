@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cold Readiness Calculator</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav">
+      <div class="logo">
+        <a href="index.html"><img src="assets/HALO LOGO WHITE.png" width="100px" height="auto" alt="HALO Logo"></a>
+      </div>
+      <div class="links">
+        <a href="index.html">HOME</a>
+        <a href="calculator.html">COLD READINESS INDEX</a>
+        <a href="aboutus.html">MEET OUR TEAM</a>
+        <a href="contact.html">CONTACT</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h1>Cold Readiness Calculator</h1>
+    <p>Upload your reaction-time CSV files or enter mean reaction time manually. Grip strength is entered below. Nothing is stored — calculations run in your browser.</p>
+
+    <section class="card">
+      <h2>Reaction Time Input Method</h2>
+
+      <div class="radio-row">
+        <label>
+          <input type="radio" name="mode" id="modeCsv" checked>
+          Upload CSVs
+        </label>
+
+        <label>
+          <input type="radio" name="mode" id="modeManual">
+          Enter mean RT manually
+        </label>
+      </div>
+
+      <div id="csvSection">
+        <div class="input-group">
+          <label for="csvFile1"><strong>Pre reaction-time CSV:</strong></label>
+          <input type="file" id="csvFile1" accept=".csv" />
+        </div>
+
+        <div class="input-group">
+          <label for="csvFile2"><strong>Post reaction-time CSV:</strong></label>
+          <input type="file" id="csvFile2" accept=".csv" />
+        </div>
+      </div>
+
+      <div id="manualBox" style="display:none;">
+        <div class="input-group">
+          <label for="preRT"><strong>Pre mean reaction time (ms):</strong></label>
+          <input type="number" id="preRT" step="0.01" min="0" placeholder="e.g. 287.4" />
+        </div>
+
+        <div class="input-group">
+          <label for="postRT"><strong>Post mean reaction time (ms):</strong></label>
+          <input type="number" id="postRT" step="0.01" min="0" placeholder="e.g. 301.8" />
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Grip Strength</h2>
+
+      <div class="input-group">
+        <label for="preGrip"><strong>Pre grip strength:</strong></label>
+        <input type="number" id="preGrip" step="0.01" min="0" placeholder="Enter your dynamometer results here" />
+      </div>
+
+      <div class="input-group">
+        <label for="postGrip"><strong>Post grip strength:</strong></label>
+        <input type="number" id="postGrip" step="0.01" min="0" placeholder="Enter your dynamometer results here" />
+      </div>
+
+      <p class="small-note">Use the same units for pre and post grip strength.</p>
+    </section>
+
+    <section class="card">
+      <h2>Preview</h2>
+      <div id="preview" class="preview-box">No file loaded.</div>
+    </section>
+
+    <section class="card">
+      <h2>Results</h2>
+      <div id="scoreBox" class="score-box">—</div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© Halo</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

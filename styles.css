@@ -1,0 +1,387 @@
+body{
+    background-color: black;
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat', sans-serif;
+}
+
+h1, h2, .links a {
+  font-family: 'Bebas Neue', sans-serif;
+}
+
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: white;
+}
+
+.nav {
+    font-weight:bolder;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100px;
+}
+
+.logo {
+    padding-right: 24px;
+    padding-left: 24px;
+}
+
+.logo a:link,
+.logo a:visited {
+    color: black;
+    text-decoration:none;
+}
+
+.links {
+    display:flex;
+    flex: 1;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.links a{
+    padding: 10px 12px;
+    border-radius: 8px;
+    transition: color 0.15s ease, background-color 0.15s ease;
+    color: black;
+    text-decoration: none;
+    font-size:xx-large;
+}
+
+.links a:link,
+.links a:visited {
+    color: black;
+    text-decoration:none;
+}
+
+.links a:hover {
+    color:slategray;
+}
+
+.container {
+    margin: 20px;
+    color: white;
+}
+
+.bigboldwithm{
+    display: flex;
+    color: white;
+    justify-content: center;
+    margin: 5%;
+    letter-spacing: 2px;
+    font-size: 48px;
+}
+
+.bigbold{
+    display: flex;
+    color: white;
+    justify-content: center;
+    margin-left: 5%;
+    margin-right: 5%;
+    font-size:xx-large;
+    letter-spacing: 2px;
+}
+
+.sublogo{
+    display: flex;
+    color: white;
+    justify-content: center;
+    margin-left: 5%;
+    margin-right: 5%;
+    font-size:xx-large;
+    letter-spacing: 2px;
+    margin-top: -30px;
+}
+
+.biggerbolder{
+    display: flex;
+    color: white;
+    justify-content: center;
+    font-size: clamp(3rem, 9vw, 11rem);
+    letter-spacing: 2px;
+    margin-top: -400px;
+}
+
+.groupphoto {
+  width: 96%;
+  height: calc(100vh - 150px);
+  margin: 0 auto;
+}
+
+.groupphoto img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.textandphoto {
+    display: flex;
+    color: white;
+    margin: 2%;
+    align-items: center;
+    gap: 40px;
+    width: 96%;
+    height: auto;
+}
+
+.textandphoto img{
+    width: 40%;
+    height: 40%;
+    object-fit: contain;
+    display: block;
+}
+
+.container {
+    text-align: center;
+}
+
+.card {
+  background: #f5f5f5;
+  border: 1px solid #d9d9d9;
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 20px;
+  color: #111111;
+}
+
+.card h2,
+.card p,
+.card label,
+.card strong,
+.card div {
+  color: #111111;
+}
+
+.input-group {
+  margin-bottom: 16px;
+}
+
+.input-group input[type="number"],
+.input-group input[type="file"] {
+  margin-top: 6px;
+  padding: 10px 12px;
+  width: 100%;
+  max-width: 420px;
+  border: 1px solid #cfcfcf;
+  border-radius: 8px;
+  font-size: 15px;
+  background: #ffffff;
+  color: #111111;
+}
+
+.radio-row {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+  color: #111111;
+}
+
+.small-note {
+  font-size: 14px;
+  opacity: 0.85;
+  color: #111111;
+}
+
+.preview-box {
+  white-space: pre-wrap;
+  background: #ffffff;
+  border: 1px solid #dddddd;
+  border-radius: 12px;
+  padding: 16px;
+  line-height: 1.6;
+  font-family: Arial, sans-serif;
+  color: #111111;
+}
+
+.score-box {
+  background: #ffffff;
+  border: 1px solid #dddddd;
+  border-radius: 12px;
+  padding: 18px;
+  font-family: Arial, sans-serif;
+  color: #111111;
+}
+
+.result-section {
+  background: #f9f9f9;
+  border: 1px solid #e2e2e2;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  color: #111111;
+}
+
+.result-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #111111;
+}
+
+.result-text {
+  line-height: 1.6;
+  color: #111111;
+}
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+  line-height: 1.5;
+  color: #111111;
+}
+
+.metric-grid div,
+.metric-grid strong {
+  color: #111111;
+}
+
+.status {
+  display: inline-block;
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.status.good {
+  background: #e6f6ea;
+  color: #1f7a39;
+}
+
+.status.bad {
+  background: #fdeaea;
+  color: #a12626;
+}
+
+.status.neutral {
+  background: #ececec;
+  color: #444444;
+}
+
+.formula {
+  background: #eeeeee;
+  border-radius: 10px;
+  padding: 12px;
+  margin: 12px 0;
+  font-weight: 500;
+  color: #111111;
+}
+
+.contact-page {
+  min-height: calc(100vh - 160px);
+  padding: 40px 20px 60px 20px;
+  color: white;
+  text-align: center;
+}
+
+.contact-title {
+  font-size: clamp(3rem, 8vw, 6rem);
+  letter-spacing: 3px;
+  margin: 0;
+  color: white;
+}
+
+.contact-subtitle {
+  font-size: 1.2rem;
+  margin-top: 8px;
+  margin-bottom: 40px;
+  color: #d9d9d9;
+}
+
+.contact-section {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto 40px auto;
+}
+
+.section-heading {
+  font-size: 2.2rem;
+  letter-spacing: 2px;
+  margin-bottom: 20px;
+  color: white;
+}
+
+.contact-card {
+  background: white;
+  color: black;
+  border-radius: 18px;
+  padding: 30px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+}
+
+.general-contact-card {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.personal-contacts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+.person-card {
+  text-align: left;
+}
+
+.contact-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.2rem;
+  letter-spacing: 2px;
+  margin: 0;
+  color: black;
+}
+
+.contact-role {
+  margin-top: 4px;
+  margin-bottom: 24px;
+  font-size: 1rem;
+  color: #666666;
+  font-style: italic;
+}
+
+.contact-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+}
+
+.contact-item {
+  background: #f5f5f5;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.contact-label {
+  display: block;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #666666;
+}
+
+.contact-item a {
+  color: black;
+  text-decoration: none;
+  font-size: 1.05rem;
+  word-break: break-word;
+  transition: color 0.15s ease;
+}
+
+.contact-item a:hover {
+  color: slategray;
+}
+
+.site-footer {
+  background: black;
+  padding-bottom: 20px;
+}
