@@ -609,7 +609,8 @@
       </div>
       <div class="login-error" id="login-err">Incorrect username or password.</div>
       <button class="btn-halo" onclick="doLogin()">ENTER</button>
-      <div class="login-note">Leaderboards and challenges are publicly viewable below ↓</div>
+      <button onclick="enterGuest()" style="width:100%;margin-top:10px;padding:12px;background:none;border:1px solid #333;border-radius:8px;color:#888;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:3px;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.borderColor='#666';this.style.color='#fff'" onmouseout="this.style.borderColor='#333';this.style.color='#888'">VIEW AS GUEST</button>
+      <div class="login-note">Guest view shows all scores and athlete data — read only.</div>
     </div>
   </div>
 
@@ -654,7 +655,7 @@
 
     <!-- Public Challenges -->
     <div class="section-title" style="margin-top:48px;">ACTIVE CHALLENGES</div>
-    <div class="section-sub">Monthly ATCs and team challenges</div>
+    <div class="section-sub">Monthly ATCs and spot checks</div>
     <div id="public-challenges-list"></div>
 
     <div style="text-align:center; margin-top:48px; padding-bottom:32px;">
@@ -671,12 +672,13 @@
         <button class="mnav-btn" onclick="showTab('leaderboard')">LEADERBOARD</button>
         <button class="mnav-btn" onclick="showTab('atc')">ATC RESULTS</button>
         <button class="mnav-btn" onclick="showTab('athletes')">ATHLETES</button>
-        <button class="mnav-btn" onclick="showTab('profile')">MY PROFILE</button>
+        <button class="mnav-btn" id="profile-tab-btn" onclick="showTab('profile')">MY PROFILE</button>
       </div>
       <div class="members-nav-user">
         <div class="nav-avatar" id="top-avatar">?</div>
         <span id="top-name" style="color:#888;font-size:12px;letter-spacing:1px;"></span>
-        <button class="btn-signout" onclick="logout()">SIGN OUT</button>
+        <button class="btn-signout" id="btn-signout" onclick="logout()">SIGN OUT</button>
+        <button class="btn-signout" id="btn-signin" style="display:none" onclick="logout()">SIGN IN</button>
       </div>
     </div>
 
@@ -698,7 +700,7 @@
         <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:28px;">
           <div>
             <div class="section-title">CHALLENGES</div>
-            <div class="section-sub">Monthly ATCs and team challenges</div>
+            <div class="section-sub">Monthly ATCs and spot checks</div>
           </div>
           <div style="display:none;gap:10px;align-items:center;" id="admin-challenge-btns">
             <button class="btn-admin" onclick="openModal('new-challenge-modal')">+ NEW CHALLENGE</button>
@@ -798,7 +800,7 @@
         <label>Type</label>
         <select id="nc-type">
           <option value="ATC">ATC (Monthly)</option>
-          <option value="challenge">Team Challenge</option>
+          <option value="challenge">Spot Check</option>
         </select>
       </div>
       <div class="mfield">
@@ -810,7 +812,7 @@
           <option value="swim">Swim 2km</option>
           <option value="8km">8km Run</option>
           <option value="strength2">Strength #2</option>
-          <option value="none">N/A (Team Challenge)</option>
+          <option value="none">N/A (Spot Check)</option>
         </select>
       </div>
       <div class="mfield">
@@ -846,7 +848,7 @@
       <div class="mfield"><label>Swim 2km (decimal time, e.g. 38.5)</label><input type="text" id="fm-swim" placeholder="Leave blank if not tested" /></div>
 
       <div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:2px;color:#888;margin:14px 0 10px;">ANAEROBIC</div>
-      <div class="mfield"><label>400m Run (decimal time, e.g. 1.08)</label><input type="text" id="fm-400" placeholder="Leave blank if not tested" /></div>
+      <div class="mfield"><label>400m Run (seconds, e.g. 65)</label><input type="text" id="fm-400" placeholder="Leave blank if not tested" /></div>
       <div class="mfield"><label>40m Sprint (seconds, e.g. 5.4)</label><input type="text" id="fm-40m" placeholder="Leave blank if not tested" /></div>
 
       <div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:2px;color:#888;margin:14px 0 10px;">STRENGTH #1 · Bench (0.7× BW) + Pull-Ups + Sit-Ups</div>
@@ -910,6 +912,7 @@ let philosophyText = '';
 let sessionPassword = null; // kept in memory only — never written to DOM or storage
 
 let currentUser = null;
+let guestMode = false;
 let currentLBEvent = 'alltime';
 let currentPublicLBEvent = 'alltime';
 let currentAthleteKey = null;
@@ -918,24 +921,61 @@ let fitnessModalTarget = null;
 // ══ HELPERS ══
 function initials(name){ return name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2); }
 function fmt(v){ return v||'—'; }
-function pct(val,target){ if(!val||!target||isNaN(val)||isNaN(target)) return 0; return Math.min(100,Math.round((val/target)*100)); }
 
 // Get latest trial for a user (most recent entry)
 function latestTrial(u){ const t=(u.fitness&&u.fitness.trials)||[]; return t.length?t[0]:{}; }
-function str1Score(u){ const f=latestTrial(u); return (f.bench||0)+(f.pullups||0)+(f.situps||0); }
-function str2Score(u){ const f=latestTrial(u); return (f.pushups||0)+(f.squats||0); }
-function eventScore(key,event){
-  const u=users[key]; if(!u) return null;
-  const f=latestTrial(u);
+
+// ── Score formulas (match the Excel spreadsheet exactly) ──
+function calcEventScore(event, trial){
+  if(!trial) return null;
   switch(event){
-    case '2400m': return f.run2400?parseFloat(f.run2400):null;
-    case '8km': return f.run8km?parseFloat(f.run8km):null;
-    case 'swim': return f.swim2km?parseFloat(f.swim2km):null;
-    case '400m': return f.run400?parseFloat(f.run400):null;
-    case 'strength1': return str1Score(u)||null;
-    case 'strength2': return str2Score(u)||null;
+    case '2400m': {
+      const t=parseFloat(trial.run2400); if(!trial.run2400||isNaN(t)) return null;
+      return Math.max(0,Math.min(100,(19-t)*(100/12)));
+    }
+    case '8km': {
+      const t=parseFloat(trial.run8km); if(!trial.run8km||isNaN(t)) return null;
+      return Math.max(0,Math.min(100,(60-t)*3.125));
+    }
+    case 'swim': {
+      const t=parseFloat(trial.swim2km); if(!trial.swim2km||isNaN(t)) return null;
+      return Math.max(0,Math.min(100,(80-t)*(100/55)));
+    }
+    case '400m': {
+      const t=parseFloat(trial.run400); if(!trial.run400||isNaN(t)) return null;
+      return Math.max(0,Math.min(100,(100-t)*1.9231)); // time in SECONDS
+    }
+    case '40m': {
+      const t=parseFloat(trial.sprint40); if(!trial.sprint40||isNaN(t)) return null;
+      return Math.max(0,Math.min(100,(8.6-t)*25));
+    }
+    case 'strength1': {
+      const b=trial.bench||0,p=trial.pullups||0,s=trial.situps||0;
+      if(!b&&!p&&!s) return null;
+      return Math.min(100,(p*1.111)+(b*0.741)+(s*0.37));
+    }
+    case 'strength2': {
+      const p=trial.pushups||0,s=trial.squats||0;
+      if(!p&&!s) return null;
+      return Math.min(100,(p*0.833)+(s*1.25));
+    }
     default: return null;
   }
+}
+
+// Total points = sum of 6 leaderboard event scores (max 600)
+function calcTotalPoints(trial){
+  if(!trial) return 0;
+  const evs=['2400m','8km','swim','400m','strength1','strength2'];
+  return Math.round(evs.reduce((sum,ev)=>{ const s=calcEventScore(ev,trial); return sum+(s||0); },0));
+}
+
+function str1Score(u){ const s=calcEventScore('strength1',latestTrial(u)); return s!==null?Math.round(s*10)/10:0; }
+function str2Score(u){ const s=calcEventScore('strength2',latestTrial(u)); return s!==null?Math.round(s*10)/10:0; }
+
+function eventScore(key,event){
+  const u=users[key]; if(!u) return null;
+  return calcEventScore(event,latestTrial(u));
 }
 
 // ══ LOGIN ══
@@ -984,12 +1024,38 @@ async function showPasswordChangePrompt(){
 function logout(){
   currentUser=null;
   sessionPassword=null;
+  guestMode=false;
   document.getElementById('app-screen').style.display='none';
   document.getElementById('login-screen').style.display='flex';
   document.getElementById('public-screen').style.display='none';
   document.getElementById('login-user').value='';
   document.getElementById('login-pass').value='';
   document.getElementById('admin-challenge-btns').style.display='none';
+  // Restore nav to default state
+  document.getElementById('top-avatar').style.display='';
+  document.getElementById('top-name').style.display='';
+  document.getElementById('btn-signout').style.display='block';
+  document.getElementById('btn-signin').style.display='none';
+  document.getElementById('profile-tab-btn').style.display='block';
+}
+
+function enterGuest(){
+  guestMode=true;
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('public-screen').style.display='none';
+  document.getElementById('app-screen').style.display='block';
+  // Nav: hide avatar/name, swap sign-out for sign-in, hide MY PROFILE tab
+  document.getElementById('top-avatar').style.display='none';
+  document.getElementById('top-name').style.display='none';
+  document.getElementById('btn-signout').style.display='none';
+  document.getElementById('btn-signin').style.display='block';
+  document.getElementById('profile-tab-btn').style.display='none';
+  // Render everything with public data already loaded
+  showTab('dashboard');
+  renderDashboard();
+  renderChallenges();
+  renderLeaderboard('alltime');
+  renderAthletes();
 }
 
 // ══ TABS ══
@@ -1025,12 +1091,12 @@ function cancelPhilosophy(){
 
 // ══ ATC LEADERBOARD ══
 const ATC_EVENTS={
-  '2400m':{ label:'2400m Run', desc:'Timed 2400m run — decimal time. Lower is better.', timed:true, field:'run2400' },
-  'strength1':{ label:'Strength #1', desc:'Bench Press (0.7× BW) + Pull-Ups + Sit-Ups — combined reps. Higher is better.', timed:false },
-  '400m':{ label:'400m Run + 40m Sprint', desc:'Timed 400m run — decimal time. Lower is better.', timed:true, field:'run400' },
-  'swim':{ label:'Swim 2km', desc:'Timed 2km swim — decimal time. Lower is better.', timed:true, field:'swim2km' },
-  '8km':{ label:'8km Run', desc:'Timed 8km run — decimal time. Lower is better.', timed:true, field:'run8km' },
-  'strength2':{ label:'Strength #2', desc:'Push-Ups + Squats (1× BW) — combined reps. Higher is better.', timed:false },
+  '2400m':{ label:'2400m Run', desc:'Score = MAX(0, MIN(100, (19 − time_min) × 100/12)). Elite: 7 min = 100 pts.' },
+  'strength1':{ label:'Strength #1', desc:'Score = (Pull-Ups × 1.111) + (Bench × 0.741) + (Sit-Ups × 0.37). Elite targets: 30 pull-ups, 45 bench, 90 sit-ups = 100 pts.' },
+  '400m':{ label:'400m Run', desc:'Score = MAX(0, MIN(100, (100 − time_sec) × 1.9231)). Time in SECONDS. Elite: ~48 sec = 100 pts.' },
+  'swim':{ label:'Swim 2km', desc:'Score = MAX(0, MIN(100, (80 − time_min) × 100/55)). Elite: 25 min = 100 pts.' },
+  '8km':{ label:'8km Run', desc:'Score = MAX(0, MIN(100, (60 − time_min) × 3.125)). Elite: 28 min = 100 pts.' },
+  'strength2':{ label:'Strength #2', desc:'Score = (Push-Ups × 0.833) + (Squats × 1.25). Elite targets: 60 push-ups, 40 squats = 100 pts.' },
 };
 
 function switchATC(event,btn){
@@ -1046,20 +1112,20 @@ function renderATC(event){
   const withScores=athleteKeys.map(k=>({key:k,score:eventScore(k,event)}));
   const hasScore=withScores.filter(x=>x.score!==null);
   const noScore=withScores.filter(x=>x.score===null);
-  if(ev&&ev.timed) hasScore.sort((a,b)=>a.score-b.score);
-  else hasScore.sort((a,b)=>b.score-a.score);
+  hasScore.sort((a,b)=>b.score-a.score); // all scores 0-100, higher = better
   const sorted=[...hasScore,...noScore];
   const medals=['🥇','🥈','🥉'];
   const rankClass=['r1','r2','r3'];
   document.getElementById('atc-lb-list').innerHTML=sorted.map(({key,score},i)=>{
     const u=users[key];
+    const displayScore=score!==null?Math.round(score*10)/10:'—';
     return `<div class="lb-row">
       <div class="lb-rank ${rankClass[i]||''}">${medals[i]||i+1}</div>
       <div class="lb-av">${initials(u.name)}</div>
       <div style="flex:1"><div class="lb-name">${u.name.toUpperCase()}</div></div>
       <div style="text-align:right">
-        <div class="lb-score">${score!==null?score:'—'}</div>
-        <div class="lb-score-label">${ev&&ev.timed?'MIN':'REPS'}</div>
+        <div class="lb-score">${displayScore}</div>
+        <div class="lb-score-label">PTS</div>
       </div>
     </div>`;
   }).join('');
@@ -1086,25 +1152,32 @@ function renderAll(){
   renderChallenges();
   renderLeaderboard('alltime');
   renderAthletes();
-  renderProfile();
+  if(!guestMode) renderProfile();
   renderPublic();
-  // Show philosophy edit btn for admin
   const pb=document.getElementById('philosophy-admin-btn');
   if(pb) pb.style.display=(currentUser&&users[currentUser].role==='admin')?'block':'none';
 }
 
 // ══ DASHBOARD ══
 function renderDashboard(){
-  const u=users[currentUser];
   const active=challenges.filter(c=>c.status==='active').length;
   const athletes=Object.keys(users).filter(k=>users[k].role==='athlete').length;
-  document.getElementById('dash-sub').textContent='Welcome back, '+u.name.toUpperCase()+'.';
-  document.getElementById('dash-stats').innerHTML=`
-    <div class="stat-block"><div class="stat-label">Active Challenges</div><div class="stat-value">${active}</div></div>
-    <div class="stat-block"><div class="stat-label">Total Athletes</div><div class="stat-value">${athletes}</div></div>
-    <div class="stat-block"><div class="stat-label">My Points</div><div class="stat-value">${u.points||0}</div></div>
-    <div class="stat-block"><div class="stat-label">My Logs</div><div class="stat-value">${(u.logs||[]).length}</div></div>
-  `;
+  if(guestMode){
+    document.getElementById('dash-sub').textContent='Viewing as guest — sign in to log scores.';
+    document.getElementById('dash-stats').innerHTML=`
+      <div class="stat-block"><div class="stat-label">Active Challenges</div><div class="stat-value">${active}</div></div>
+      <div class="stat-block"><div class="stat-label">Total Athletes</div><div class="stat-value">${athletes}</div></div>
+    `;
+  } else {
+    const u=users[currentUser];
+    document.getElementById('dash-sub').textContent='Welcome back, '+u.name.toUpperCase()+'.';
+    document.getElementById('dash-stats').innerHTML=`
+      <div class="stat-block"><div class="stat-label">Active Challenges</div><div class="stat-value">${active}</div></div>
+      <div class="stat-block"><div class="stat-label">Total Athletes</div><div class="stat-value">${athletes}</div></div>
+      <div class="stat-block"><div class="stat-label">My Points</div><div class="stat-value">${u.points||0}</div></div>
+      <div class="stat-block"><div class="stat-label">My Logs</div><div class="stat-value">${(u.logs||[]).length}</div></div>
+    `;
+  }
   document.getElementById('activity-feed').innerHTML=feed.length?feed.map(f=>`
     <div class="feed-item">
       <div class="feed-dot"></div>
@@ -1134,9 +1207,9 @@ function renderChallenges(){
       <div class="challenge-desc">${c.desc}</div>
       <div class="challenge-meta">
         <span>📅 ${c.month||''}</span>
-        ${c.type==='ATC'?'<span>🏆 Monthly ATC</span>':'<span>🎯 Team Challenge</span>'}
+        ${c.type==='ATC'?'<span>🏆 Monthly ATC</span>':'<span>🎯 Spot Check</span>'}
       </div>
-      ${c.status==='active'&&currentUser!=='admin'?`<button class="btn-log" onclick="openLogModal(${c.id})">LOG SCORE</button>`:''}
+      ${c.status==='active'&&currentUser&&currentUser!=='admin'&&!guestMode?`<button class="btn-log" onclick="openLogModal(${c.id})">LOG SCORE</button>`:''}
     </div>
   `).join('');
 }
@@ -1155,17 +1228,11 @@ function renderLeaderboard(event){
   if(event==='alltime'){
     sorted=[...athleteKeys].sort((a,b)=>(users[b].points||0)-(users[a].points||0));
   } else {
-    // For timed events (lower=better): 2400m, 8km, swim, 400m
-    const timedEvents=['2400m','8km','swim','400m'];
-    const isTimed=timedEvents.includes(event);
+    // All event scores are 0-100 — higher is always better
     const withScores=athleteKeys.map(k=>({key:k,score:eventScore(k,event)}));
     const hasScore=withScores.filter(x=>x.score!==null);
     const noScore=withScores.filter(x=>x.score===null);
-    if(isTimed){
-      hasScore.sort((a,b)=>a.score-b.score); // lower time = better
-    } else {
-      hasScore.sort((a,b)=>b.score-a.score); // higher reps = better
-    }
+    hasScore.sort((a,b)=>b.score-a.score);
     sorted=[...hasScore,...noScore].map(x=>x.key);
   }
 
@@ -1175,7 +1242,7 @@ function renderLeaderboard(event){
   document.getElementById('lb-list').innerHTML=sorted.map((k,i)=>{
     const u=users[k];
     const sc=event==='alltime'?(u.points||0):eventScore(k,event);
-    const scLabel=event==='alltime'?'PTS':eventLabel(event);
+    const scRounded=sc!==null?Math.round(sc*10)/10:null;
     return `<div class="lb-row">
       <div class="lb-rank ${rankClass[i]||''}">${medals[i]||i+1}</div>
       <div class="lb-av">${initials(u.name)}</div>
@@ -1184,17 +1251,14 @@ function renderLeaderboard(event){
         <div class="lb-event-scores">${u.points||0} total pts</div>
       </div>
       <div style="text-align:right">
-        <div class="lb-score">${sc!==null?sc:'—'}</div>
-        <div class="lb-score-label">${scLabel}</div>
+        <div class="lb-score">${scRounded!==null?scRounded:'—'}</div>
+        <div class="lb-score-label">PTS</div>
       </div>
     </div>`;
   }).join('');
 }
 
-function eventLabel(e){
-  const map={alltime:'PTS','2400m':'MIN','8km':'MIN',swim:'MIN','400m':'MIN',strength1:'REPS',strength2:'REPS'};
-  return map[e]||'';
-}
+function eventLabel(){ return 'PTS'; }
 
 // ══ ATHLETES ══
 function renderAthletes(){
@@ -1248,15 +1312,15 @@ function openAthleteModal(key){
   const u=users[key];
   const trials=(u.fitness&&u.fitness.trials)||[];
   const f=trials.length?trials[0]:{};
-  const isAdmin=users[currentUser].role==='admin';
+  const isAdmin=currentUser&&users[currentUser].role==='admin';
   const editBtn=document.getElementById('athlete-modal-edit-btn');
   if(editBtn) editBtn.style.display=isAdmin?'block':'none';
   const resetBtn=document.getElementById('athlete-modal-reset-btn');
   if(resetBtn) resetBtn.style.display=isAdmin?'block':'none';
   const wipeBtn=document.getElementById('athlete-modal-wipe-btn');
   if(wipeBtn) wipeBtn.style.display=isAdmin?'block':'none';
-  const str1=(f.bench||0)+(f.pullups||0)+(f.situps||0);
-  const str2=(f.pushups||0)+(f.squats||0);
+  const str1Raw=calcEventScore('strength1',f); const str1=str1Raw!==null?Math.round(str1Raw*10)/10:null;
+  const str2Raw=calcEventScore('strength2',f); const str2=str2Raw!==null?Math.round(str2Raw*10)/10:null;
 
   document.getElementById('athlete-modal-body').innerHTML=`
     <div class="profile-header">
@@ -1264,7 +1328,11 @@ function openAthleteModal(key){
       <div>
         <div class="profile-name">${u.name.toUpperCase()}</div>
         <div class="profile-role">ATHLETE</div>
-        <div class="profile-pts">${u.points||0} points · ${trials.length} spot check${trials.length!==1?'s':''} · ${(u.logs||[]).length} logs</div>
+        <div class="profile-pts">
+          ${u.points||0} points
+          ${isAdmin?`<button onclick="setAthletePoints('${key}')" style="font-family:'Montserrat',sans-serif;font-size:10px;font-weight:600;letter-spacing:1px;color:#555;background:none;border:1px solid #333;border-radius:4px;padding:2px 7px;cursor:pointer;margin-left:8px;vertical-align:middle;" onmouseover="this.style.color='#fff';this.style.borderColor='#666'" onmouseout="this.style.color='#555';this.style.borderColor='#333'">OVERRIDE</button>`:''}
+          · ${trials.length} spot check${trials.length!==1?'s':''} · ${(u.logs||[]).length} logs
+        </div>
       </div>
     </div>
 
@@ -1290,7 +1358,7 @@ function openAthleteModal(key){
       ${fitnessItem('2400m Run',f.run2400,'min')}
       ${fitnessItem('8km Run',f.run8km,'min')}
       ${fitnessItem('Swim 2km',f.swim2km,'min')}
-      ${fitnessItem('400m Run',f.run400,'min')}
+      ${fitnessItem('400m Run',f.run400,'sec')}
       ${fitnessItem('40m Sprint',f.sprint40,'sec')}
     </div>
 
@@ -1355,8 +1423,8 @@ function renderProfile(){
   const trials=(u.fitness&&u.fitness.trials)||[];
   const f=trials.length?trials[0]:{};
   const isAdmin=u.role==='admin';
-  const str1=(f.bench||0)+(f.pullups||0)+(f.situps||0);
-  const str2=(f.pushups||0)+(f.squats||0);
+  const str1Raw=calcEventScore('strength1',f); const str1=str1Raw!==null?Math.round(str1Raw*10)/10:null;
+  const str2Raw=calcEventScore('strength2',f); const str2=str2Raw!==null?Math.round(str2Raw*10)/10:null;
   document.getElementById('profile-content').innerHTML=`
     <div class="profile-header">
       <div class="profile-av-xl">${initials(u.name)}</div>
@@ -1673,13 +1741,10 @@ function renderPublicLB(event){
   if(event==='alltime'){
     sorted=[...athleteKeys].sort((a,b)=>(users[b].points||0)-(users[a].points||0));
   } else {
-    const timedEvents=['2400m','8km','swim','400m'];
-    const isTimed=timedEvents.includes(event);
     const withScores=athleteKeys.map(k=>({key:k,score:eventScore(k,event)}));
     const hasScore=withScores.filter(x=>x.score!==null);
     const noScore=withScores.filter(x=>x.score===null);
-    if(isTimed) hasScore.sort((a,b)=>a.score-b.score);
-    else hasScore.sort((a,b)=>b.score-a.score);
+    hasScore.sort((a,b)=>b.score-a.score);
     sorted=[...hasScore,...noScore].map(x=>x.key);
   }
   const medals=['🥇','🥈','🥉'];
@@ -1687,13 +1752,14 @@ function renderPublicLB(event){
   document.getElementById('public-lb-list').innerHTML=sorted.map((k,i)=>{
     const u=users[k];
     const sc=event==='alltime'?(u.points||0):eventScore(k,event);
+    const scRounded=sc!==null?Math.round(sc*10)/10:null;
     return `<div class="lb-row">
       <div class="lb-rank ${rankClass[i]||''}">${medals[i]||i+1}</div>
       <div class="lb-av">${initials(u.name)}</div>
       <div style="flex:1"><div class="lb-name">${u.name.toUpperCase()}</div></div>
       <div style="text-align:right">
-        <div class="lb-score">${sc!==null?sc:'—'}</div>
-        <div class="lb-score-label">${eventLabel(event)}</div>
+        <div class="lb-score">${scRounded!==null?scRounded:'—'}</div>
+        <div class="lb-score-label">PTS</div>
       </div>
     </div>`;
   }).join('');
@@ -1740,6 +1806,24 @@ async function changeOwnPassword(){
     sessionPassword=np;
     if(users[currentUser]) users[currentUser].mustChangePassword=false;
     alert('Password updated. Remember it for next time!');
+  }catch(e){alert('Connection error. Please try again.');}
+}
+
+// ══ ADMIN OVERRIDE POINTS ══
+async function setAthletePoints(key){
+  const u=users[key]; if(!u) return;
+  const current=u.points||0;
+  const input=prompt(`Override points for ${u.name}.\n\nCurrent: ${current} pts\n\nEnter new total (leave calculated points from spot checks behind — this manually overrides them):`);
+  if(input===null) return;
+  const pts=parseInt(input,10);
+  if(isNaN(pts)||pts<0){alert('Please enter a valid non-negative number.');return;}
+  try{
+    const res=await fetch('/api/update-profile',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:currentUser,password:sessionPassword,targetUsername:key,field:'points',value:pts})});
+    const data=await res.json();
+    if(data.error){alert('Error: '+data.error);return;}
+    if(data.updatedMember) users[key]={...users[key],...data.updatedMember};
+    renderAll();
+    openAthleteModal(key); // refresh modal to show new points
   }catch(e){alert('Connection error. Please try again.');}
 }
 

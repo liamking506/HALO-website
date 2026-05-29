@@ -24,11 +24,16 @@ exports.handler = async (event) => {
     u.password = value;
     u.mustChangePassword = false;
   } else if (field === 'resetPassword') {
-    // Admin-only: set a temp password the member must change on next login
     if (!isAdmin) return unauth('Admin only');
     if (!value || value.length < 6) return badReq('Password must be at least 6 characters');
     u.password = value;
     u.mustChangePassword = true;
+  } else if (field === 'points') {
+    // Admin-only: manually override an athlete's total points
+    if (!isAdmin) return unauth('Admin only');
+    const pts = parseInt(value, 10);
+    if (isNaN(pts) || pts < 0) return badReq('Points must be a non-negative number');
+    u.points = pts;
   } else {
     return badReq('Unknown field');
   }
