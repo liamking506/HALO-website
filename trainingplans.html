@@ -893,6 +893,7 @@
       <div class="modal-actions">
         <button class="btn-outline" onclick="closeModal('athlete-modal')">CLOSE</button>
         <button class="btn-outline" id="athlete-modal-reset-btn" style="display:none" onclick="resetMemberPassword(currentAthleteKey)">RESET PASSWORD</button>
+        <button class="btn-outline" id="athlete-modal-wipe-btn" style="display:none;border-color:#5a2020;color:#c06565;" onclick="resetAthlete(currentAthleteKey)">RESET ALL DATA</button>
         <button class="btn-admin" id="athlete-modal-edit-btn" style="display:none" onclick="openFitnessModal(currentAthleteKey)">+ ADD SPOT CHECK</button>
       </div>
     </div>
@@ -1252,6 +1253,8 @@ function openAthleteModal(key){
   if(editBtn) editBtn.style.display=isAdmin?'block':'none';
   const resetBtn=document.getElementById('athlete-modal-reset-btn');
   if(resetBtn) resetBtn.style.display=isAdmin?'block':'none';
+  const wipeBtn=document.getElementById('athlete-modal-wipe-btn');
+  if(wipeBtn) wipeBtn.style.display=isAdmin?'block':'none';
   const str1=(f.bench||0)+(f.pullups||0)+(f.situps||0);
   const str2=(f.pushups||0)+(f.squats||0);
 
@@ -1752,6 +1755,20 @@ async function resetMemberPassword(key){
     if(data.error){alert('Error: '+data.error);return;}
     if(data.updatedMember) users[key]={...users[key],...data.updatedMember};
     alert('Password reset for '+u.name+'.\nTemp password: '+np+'\nThey will set their own password on next login.');
+  }catch(e){alert('Connection error. Please try again.');}
+}
+
+// ══ RESET ALL ATHLETE DATA (Admin) ══
+async function resetAthlete(key){
+  const u=users[key]; if(!u) return;
+  if(!confirm('Reset ALL data for '+u.name+'?\n\nThis permanently deletes every challenge log, every spot-check trial, and sets their points back to 0.\n\nTheir login and bio are kept. This cannot be undone.')) return;
+  try{
+    const res=await fetch('/api/reset-athlete',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:currentUser,password:sessionPassword,targetUsername:key})});
+    const data=await res.json();
+    if(data.error){alert('Error resetting: '+data.error);return;}
+    if(data.updatedMember) users[key]={...users[key],...data.updatedMember};
+    renderAll();
+    openAthleteModal(key); // refresh the open modal
   }catch(e){alert('Connection error. Please try again.');}
 }
 
