@@ -385,3 +385,34 @@ h1, h2, .links a {
   background: black;
   padding-bottom: 20px;
 }
+
+@media (max-width: 768px) {
+  .nav {
+    height: auto;
+    flex-direction: column;
+    padding: 12px 0;
+    gap: 10px;
+  }
+
+  .logo {
+    padding: 0;
+  }
+
+  .logo img {
+    width: 85px;
+  }
+
+  .links {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 12px;
+  }
+
+  .links a {
+    font-size: 1.3rem;
+    padding: 6px 8px;
+    text-align: center;
+  }
+}

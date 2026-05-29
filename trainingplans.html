@@ -1,0 +1,1736 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Human Analogue Labs | Members</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ── HALO MEMBERS PORTAL STYLES ── */
+    :root {
+      --halo-black: #000000;
+      --halo-white: #ffffff;
+      --halo-silver: #c8c8c8;
+      --halo-dimwhite: #e8e8e8;
+      --halo-card: #111111;
+      --halo-card2: #1a1a1a;
+      --halo-border: #2a2a2a;
+      --halo-accent: #ffffff;
+      --halo-muted: #888888;
+      --halo-gold: #c9a84c;
+      --halo-silver-medal: #a0a0a0;
+      --halo-bronze: #8b5e3c;
+    }
+
+    body { background-color: #000; margin: 0; padding: 0; font-family: 'Montserrat', sans-serif; }
+
+    /* nav inherits from styles.css */
+    .site-header { background: white; }
+
+    /* ── LOGIN SCREEN ── */
+    #login-screen {
+      min-height: calc(100vh - 100px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #000;
+      padding: 40px 20px;
+    }
+    .login-box {
+      background: #111;
+      border: 1px solid #2a2a2a;
+      border-radius: 16px;
+      padding: 48px 40px;
+      width: 100%;
+      max-width: 380px;
+      text-align: center;
+    }
+    .login-logo { margin-bottom: 8px; }
+    .login-logo img { width: 120px; height: auto; }
+    .login-tagline {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      color: var(--halo-muted);
+      letter-spacing: 3px;
+      margin-bottom: 36px;
+    }
+    .login-box h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      color: #fff;
+      letter-spacing: 3px;
+      margin: 0 0 28px;
+    }
+    .login-field {
+      margin-bottom: 16px;
+      text-align: left;
+    }
+    .login-field label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--halo-muted);
+      margin-bottom: 6px;
+    }
+    .login-field input {
+      width: 100%;
+      padding: 12px 14px;
+      background: #000;
+      border: 1px solid #333;
+      border-radius: 8px;
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 14px;
+      box-sizing: border-box;
+      transition: border-color 0.2s;
+    }
+    .login-field input:focus { outline: none; border-color: #666; }
+    .login-error {
+      font-size: 12px;
+      color: #e05555;
+      margin-bottom: 12px;
+      display: none;
+    }
+    .btn-halo {
+      width: 100%;
+      padding: 14px;
+      background: #fff;
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem;
+      letter-spacing: 3px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      margin-top: 4px;
+    }
+    .btn-halo:hover { background: var(--halo-silver); }
+    .login-note {
+      font-size: 11px;
+      color: #444;
+      margin-top: 16px;
+    }
+
+    /* ── APP SHELL ── */
+    #app-screen { display: none; }
+
+    /* ── TOP NAV BAR (inside app) ── */
+    .members-nav {
+      background: #111;
+      border-bottom: 1px solid #222;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      height: 52px;
+      position: sticky;
+      top: 100px;
+      z-index: 90;
+    }
+    .members-nav-tabs { display: flex; gap: 2px; }
+    .mnav-btn {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1rem;
+      letter-spacing: 2px;
+      color: var(--halo-muted);
+      background: none;
+      border: none;
+      padding: 8px 16px;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: color 0.15s;
+      margin-bottom: -1px;
+    }
+    .mnav-btn:hover { color: #fff; }
+    .mnav-btn.active { color: #fff; border-bottom-color: #fff; }
+    .members-nav-user {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      color: var(--halo-muted);
+      cursor: pointer;
+    }
+    .nav-avatar {
+      width: 30px; height: 30px; border-radius: 50%;
+      background: #fff; color: #000;
+      font-size: 11px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .btn-signout {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      color: #555;
+      background: none;
+      border: 1px solid #333;
+      border-radius: 6px;
+      padding: 5px 12px;
+      cursor: pointer;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .btn-signout:hover { color: #fff; border-color: #666; }
+
+    /* ── MAIN CONTENT ── */
+    .members-main {
+      background: #000;
+      min-height: calc(100vh - 152px);
+      padding: 32px 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* ── SECTIONS ── */
+    .msection { display: none; }
+    .msection.active { display: block; }
+
+    /* ── SECTION HEADERS ── */
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      color: #fff;
+      letter-spacing: 4px;
+      margin: 0 0 4px;
+    }
+    .section-sub {
+      font-size: 13px;
+      color: var(--halo-muted);
+      margin-bottom: 28px;
+      letter-spacing: 1px;
+    }
+
+    /* ── HALO CARDS ── */
+    .halo-card {
+      background: #111;
+      border: 1px solid #222;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+    .halo-card-dark {
+      background: #0a0a0a;
+      border: 1px solid #1e1e1e;
+      border-radius: 10px;
+      padding: 18px 20px;
+      margin-bottom: 12px;
+    }
+
+    /* ── STAT GRID ── */
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .stat-block {
+      background: #111;
+      border: 1px solid #222;
+      border-radius: 10px;
+      padding: 16px;
+    }
+    .stat-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--halo-muted);
+      margin-bottom: 6px;
+    }
+    .stat-value {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      color: #fff;
+      letter-spacing: 1px;
+    }
+
+    /* ── CHALLENGES ── */
+    .challenge-status {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+    }
+    .status-active { background: #fff; color: #000; }
+    .status-upcoming { background: #222; color: #999; border: 1px solid #444; }
+    .status-completed { background: #1a1a1a; color: #555; border: 1px solid #2a2a2a; }
+    .challenge-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem;
+      color: #fff;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+    }
+    .challenge-desc { font-size: 13px; color: #aaa; line-height: 1.6; margin-bottom: 14px; }
+    .challenge-meta { display: flex; gap: 20px; font-size: 12px; color: #666; flex-wrap: wrap; }
+    .challenge-meta span { display: flex; align-items: center; gap: 5px; }
+    .progress-track {
+      height: 3px;
+      background: #222;
+      border-radius: 2px;
+      margin: 14px 0 6px;
+      overflow: hidden;
+    }
+    .progress-fill { height: 100%; background: #fff; border-radius: 2px; transition: width 0.4s; }
+    .btn-log {
+      margin-top: 14px;
+      padding: 10px 20px;
+      background: none;
+      border: 1px solid #fff;
+      color: #fff;
+      border-radius: 6px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1rem;
+      letter-spacing: 2px;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+    .btn-log:hover { background: #fff; color: #000; }
+    .btn-admin {
+      padding: 10px 20px;
+      background: #fff;
+      border: none;
+      color: #000;
+      border-radius: 6px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1rem;
+      letter-spacing: 2px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-admin:hover { background: var(--halo-silver); }
+    .btn-outline {
+      padding: 8px 18px;
+      background: none;
+      border: 1px solid #333;
+      color: #888;
+      border-radius: 6px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .btn-outline:hover { border-color: #666; color: #fff; }
+
+    /* ── LEADERBOARD ── */
+    .lb-tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+    .lb-tab {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.9rem;
+      letter-spacing: 2px;
+      padding: 7px 16px;
+      background: none;
+      border: 1px solid #333;
+      color: #666;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .lb-tab.active { background: #fff; color: #000; border-color: #fff; }
+    .lb-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 0;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    .lb-row:last-child { border-bottom: none; }
+    .lb-rank {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      color: #444;
+      width: 32px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+    .lb-rank.r1 { color: var(--halo-gold); }
+    .lb-rank.r2 { color: var(--halo-silver-medal); }
+    .lb-rank.r3 { color: var(--halo-bronze); }
+    .lb-av {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: #222; color: #fff;
+      font-size: 13px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .lb-name {
+      flex: 1;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.2rem;
+      color: #fff;
+      letter-spacing: 1px;
+    }
+    .lb-score {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      color: #fff;
+    }
+    .lb-score-label { font-size: 10px; color: #555; letter-spacing: 1px; }
+    .lb-event-scores { font-size: 11px; color: #555; margin-top: 2px; }
+
+    /* ── ATHLETE PROFILES (public) ── */
+    .athletes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .athlete-card {
+      background: #111;
+      border: 1px solid #222;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    .athlete-card:hover { border-color: #555; }
+    .athlete-av-lg {
+      width: 60px; height: 60px; border-radius: 50%;
+      background: #222; color: #fff;
+      font-size: 20px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 12px;
+    }
+    .athlete-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      color: #fff;
+      letter-spacing: 2px;
+    }
+    .athlete-pts { font-size: 12px; color: #666; margin-top: 4px; }
+
+    /* ── MY PROFILE / ATHLETE DETAIL ── */
+    .profile-header {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+    .profile-av-xl {
+      width: 80px; height: 80px; border-radius: 50%;
+      background: #222; color: #fff;
+      font-size: 28px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      border: 1px solid #333;
+    }
+    .profile-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.4rem;
+      color: #fff;
+      letter-spacing: 3px;
+      margin: 0;
+    }
+    .profile-role { font-size: 12px; color: #666; letter-spacing: 2px; text-transform: uppercase; margin-top: 4px; }
+    .profile-pts { font-size: 14px; color: #aaa; margin-top: 6px; }
+
+    /* fitness standard table */
+    .fitness-section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem;
+      color: #fff;
+      letter-spacing: 3px;
+      margin: 20px 0 12px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #222;
+    }
+    .fitness-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .fitness-item {
+      background: #0a0a0a;
+      border: 1px solid #1e1e1e;
+      border-radius: 8px;
+      padding: 12px 14px;
+    }
+    .fitness-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #555; margin-bottom: 4px; }
+    .fitness-value { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; color: #fff; }
+    .fitness-target { font-size: 10px; color: #444; margin-top: 2px; }
+    .fitness-bar { height: 2px; background: #1a1a1a; border-radius: 1px; margin-top: 6px; overflow: hidden; }
+    .fitness-bar-fill { height: 100%; background: #fff; border-radius: 1px; }
+
+    /* trial history */
+    .trial-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 8px; }
+    .trial-table th {
+      font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+      color: #555; padding: 6px 8px; text-align: left; border-bottom: 1px solid #1e1e1e;
+    }
+    .trial-table td { padding: 8px 8px; color: #aaa; border-bottom: 1px solid #111; }
+    .trial-table tr:last-child td { border-bottom: none; }
+    .trial-table td:first-child { color: #555; }
+
+    /* activity feed */
+    .feed-item { display: flex; gap: 12px; align-items: flex-start; padding: 12px 0; border-bottom: 1px solid #1a1a1a; }
+    .feed-item:last-child { border-bottom: none; }
+    .feed-dot { width: 8px; height: 8px; border-radius: 50%; background: #fff; margin-top: 5px; flex-shrink: 0; }
+    .feed-body { flex: 1; }
+    .feed-title { font-size: 13px; color: #ddd; }
+    .feed-sub { font-size: 11px; color: #555; margin-top: 3px; }
+
+    /* ── MODALS ── */
+    .modal-bg {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.85);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-bg.open { display: flex; }
+    .modal-box {
+      background: #111;
+      border: 1px solid #2a2a2a;
+      border-radius: 14px;
+      padding: 28px;
+      width: 100%;
+      max-width: 480px;
+      max-height: 85vh;
+      overflow-y: auto;
+    }
+    .modal-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem;
+      color: #fff;
+      letter-spacing: 3px;
+      margin: 0 0 20px;
+    }
+    .mfield { margin-bottom: 14px; }
+    .mfield label { display: block; font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #555; margin-bottom: 6px; }
+    .mfield input, .mfield select, .mfield textarea {
+      width: 100%; padding: 10px 12px;
+      background: #000; border: 1px solid #333; border-radius: 6px;
+      color: #fff; font-family: 'Montserrat', sans-serif; font-size: 13px;
+      box-sizing: border-box; transition: border-color 0.2s;
+    }
+    .mfield input:focus, .mfield select, .mfield textarea:focus { outline: none; border-color: #666; }
+    .mfield select option { background: #111; }
+    .mfield textarea { resize: vertical; min-height: 70px; }
+    .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+
+    /* ── PUBLIC SECTIONS ── */
+    .public-note {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #555;
+      border: 1px solid #222;
+      border-radius: 20px;
+      padding: 4px 12px;
+      margin-bottom: 20px;
+    }
+    .public-dot { width: 6px; height: 6px; border-radius: 50%; background: #fff; }
+
+    /* ── ADMIN BADGE ── */
+    .admin-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      background: #fff;
+      color: #000;
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-left: 10px;
+      vertical-align: middle;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .members-main { padding: 20px 14px; }
+      .members-nav { padding: 0 14px; top: auto; position: relative; }
+      .mnav-btn { font-size: 0.85rem; padding: 8px 10px; letter-spacing: 1px; }
+      .login-box { padding: 32px 24px; }
+    }
+
+    /* ── SPOT CHECK NOTE ── */
+    .spot-note {
+      font-size: 11px;
+      color: #444;
+      font-style: italic;
+      margin-bottom: 20px;
+      letter-spacing: 1px;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <nav class="nav">
+      <div class="logo">
+        <a href="index.html"><img src="assets/halologoblackletters.png" width="100px" height="auto" alt="HALO Logo"></a>
+      </div>
+      <div class="links">
+        <a href="index.html">HOME</a>
+        <a href="trainingplans.html" style="color:slategray">TRAINING</a>
+        <a href="calculator.html">CRI</a>
+        <a href="aboutus.html">ABOUT US</a>
+        <a href="contact.html">CONTACT</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ══ LOGIN SCREEN ══ -->
+  <div id="login-screen">
+    <div class="login-box">
+      <div class="login-logo">
+        <img src="assets/halologowhiteletters.png" alt="HALO" onerror="this.style.display='none';document.getElementById('login-text-logo').style.display='block'">
+        <div id="login-text-logo" style="display:none;font-family:'Bebas Neue',sans-serif;font-size:3rem;color:#fff;letter-spacing:6px;">HALO</div>
+      </div>
+      <div class="login-tagline">MEMBER PORTAL</div>
+      <div class="login-field">
+        <label>Username</label>
+        <input type="text" id="login-user" placeholder="Enter username" autocomplete="username" />
+      </div>
+      <div class="login-field">
+        <label>Password</label>
+        <input type="password" id="login-pass" placeholder="Enter password" autocomplete="current-password" />
+      </div>
+      <div class="login-error" id="login-err">Incorrect username or password.</div>
+      <button class="btn-halo" onclick="doLogin()">ENTER</button>
+      <div class="login-note">Leaderboards and challenges are publicly viewable below ↓</div>
+    </div>
+  </div>
+
+  <!-- ══ PUBLIC VIEW (no login) ══ -->
+  <div id="public-screen" style="display:none; background:#000; min-height:60vh; padding: 32px 24px; max-width:1200px; margin:0 auto;">
+    <div class="public-note"><span class="public-dot"></span> Public</div>
+
+    <!-- Philosophy Section -->
+    <div id="philosophy-section" style="margin-bottom:48px;">
+      <div class="section-title">OUR APPROACH</div>
+      <div class="section-sub">Why we train the way we train</div>
+      <div class="halo-card" id="philosophy-content">
+        <div style="font-size:14px;color:#aaa;line-height:1.8;" id="philosophy-text-display">
+          Human Analogue Labs uses Analogue Training Challenges (ATCs) and bimonthly spot checks to measure raw, functional fitness across all energy systems — aerobic capacity, anaerobic power, and strength. These benchmarks are designed to reflect real-world performance demands, not gym metrics. The spot checks provide longitudinal data to track each athlete's development over time, while ATCs create competitive pressure that drives adaptation. Together, they form the foundation of the HALO fitness standard.
+        </div>
+        <div id="philosophy-admin-btn" style="display:none;margin-top:12px;">
+          <button class="btn-outline" style="font-size:11px;" onclick="editPhilosophy()">EDIT THIS SECTION</button>
+        </div>
+        <div id="philosophy-edit-area" style="display:none;">
+          <textarea id="philosophy-textarea" style="width:100%;min-height:120px;background:#000;border:1px solid #333;border-radius:6px;color:#fff;font-family:'Montserrat',sans-serif;font-size:13px;padding:10px;box-sizing:border-box;line-height:1.8;resize:vertical;"></textarea>
+          <div style="display:flex;gap:10px;margin-top:10px;">
+            <button class="btn-admin" onclick="savePhilosophy()">SAVE</button>
+            <button class="btn-outline" onclick="cancelPhilosophy()">CANCEL</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Public Leaderboard -->
+    <div class="section-title">LEADERBOARD</div>
+    <div class="section-sub">All-time rankings · Updated after each ATC</div>
+    <div class="lb-tabs">
+      <button class="lb-tab active" onclick="switchPublicLB('alltime',this)">ALL TIME</button>
+      <button class="lb-tab" onclick="switchPublicLB('2400m',this)">2400M RUN</button>
+      <button class="lb-tab" onclick="switchPublicLB('strength1',this)">STRENGTH #1</button>
+      <button class="lb-tab" onclick="switchPublicLB('400m',this)">400M RUN</button>
+      <button class="lb-tab" onclick="switchPublicLB('swim',this)">SWIM</button>
+      <button class="lb-tab" onclick="switchPublicLB('8km',this)">8KM RUN</button>
+      <button class="lb-tab" onclick="switchPublicLB('strength2',this)">STRENGTH #2</button>
+    </div>
+    <div class="halo-card" id="public-lb-list"></div>
+
+    <!-- Public Challenges -->
+    <div class="section-title" style="margin-top:48px;">ACTIVE CHALLENGES</div>
+    <div class="section-sub">Monthly ATCs and team challenges</div>
+    <div id="public-challenges-list"></div>
+
+    <div style="text-align:center; margin-top:48px; padding-bottom:32px;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:3px;color:#333;">SIGN IN TO LOG SCORES AND VIEW ATHLETE PROFILES</div>
+    </div>
+  </div>
+
+  <!-- ══ APP SCREEN (logged in) ══ -->
+  <div id="app-screen">
+    <div class="members-nav">
+      <div class="members-nav-tabs">
+        <button class="mnav-btn active" onclick="showTab('dashboard')">DASHBOARD</button>
+        <button class="mnav-btn" onclick="showTab('challenges')">CHALLENGES</button>
+        <button class="mnav-btn" onclick="showTab('leaderboard')">LEADERBOARD</button>
+        <button class="mnav-btn" onclick="showTab('atc')">ATC RESULTS</button>
+        <button class="mnav-btn" onclick="showTab('athletes')">ATHLETES</button>
+        <button class="mnav-btn" onclick="showTab('profile')">MY PROFILE</button>
+      </div>
+      <div class="members-nav-user">
+        <div class="nav-avatar" id="top-avatar">?</div>
+        <span id="top-name" style="color:#888;font-size:12px;letter-spacing:1px;"></span>
+        <button class="btn-signout" onclick="logout()">SIGN OUT</button>
+      </div>
+    </div>
+
+    <div class="members-main">
+
+      <!-- DASHBOARD -->
+      <div class="msection active" id="tab-dashboard">
+        <div class="section-title">DASHBOARD</div>
+        <div class="section-sub" id="dash-sub">Welcome back.</div>
+        <div class="stat-grid" id="dash-stats"></div>
+        <div class="halo-card">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:3px;color:#555;margin-bottom:14px;">RECENT ACTIVITY</div>
+          <div id="activity-feed"></div>
+        </div>
+      </div>
+
+      <!-- CHALLENGES -->
+      <div class="msection" id="tab-challenges">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:28px;">
+          <div>
+            <div class="section-title">CHALLENGES</div>
+            <div class="section-sub">Monthly ATCs and team challenges</div>
+          </div>
+          <div style="display:none;gap:10px;align-items:center;" id="admin-challenge-btns">
+            <button class="btn-admin" onclick="openModal('new-challenge-modal')">+ NEW CHALLENGE</button>
+          </div>
+        </div>
+        <div id="challenges-list"></div>
+      </div>
+
+      <!-- LEADERBOARD -->
+      <div class="msection" id="tab-leaderboard">
+        <div class="section-title">LEADERBOARD</div>
+        <div class="section-sub">Rankings updated after each ATC</div>
+        <div class="lb-tabs" id="lb-tabs">
+          <button class="lb-tab active" onclick="switchLB('alltime',this)">ALL TIME</button>
+          <button class="lb-tab" onclick="switchLB('2400m',this)">2400M RUN</button>
+          <button class="lb-tab" onclick="switchLB('strength1',this)">STRENGTH #1</button>
+          <button class="lb-tab" onclick="switchLB('400m',this)">400M RUN</button>
+          <button class="lb-tab" onclick="switchLB('swim',this)">SWIM</button>
+          <button class="lb-tab" onclick="switchLB('8km',this)">8KM RUN</button>
+          <button class="lb-tab" onclick="switchLB('strength2',this)">STRENGTH #2</button>
+        </div>
+        <div class="halo-card" id="lb-list"></div>
+      </div>
+
+      <!-- ATC RESULTS -->
+      <div class="msection" id="tab-atc">
+        <div class="section-title">ATC RESULTS</div>
+        <div class="section-sub">Per-event leaderboards from Analogue Training Challenges</div>
+        <div class="lb-tabs" id="atc-tabs">
+          <button class="lb-tab active" onclick="switchATC('2400m',this)">2400M RUN</button>
+          <button class="lb-tab" onclick="switchATC('strength1',this)">STRENGTH #1</button>
+          <button class="lb-tab" onclick="switchATC('400m',this)">400M + 40M</button>
+          <button class="lb-tab" onclick="switchATC('swim',this)">SWIM 2KM</button>
+          <button class="lb-tab" onclick="switchATC('8km',this)">8KM RUN</button>
+          <button class="lb-tab" onclick="switchATC('strength2',this)">STRENGTH #2</button>
+        </div>
+        <div class="halo-card" style="margin-bottom:16px;">
+          <div style="font-size:11px;color:#444;letter-spacing:1px;margin-bottom:16px;" id="atc-event-desc"></div>
+          <div id="atc-lb-list"></div>
+        </div>
+        <div style="margin-top:24px;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:3px;color:#555;margin-bottom:12px;">ALL-TIME ATC POINTS</div>
+          <div class="halo-card" id="atc-alltime-list"></div>
+        </div>
+      </div>
+
+      <!-- ATHLETES -->
+      <div class="msection" id="tab-athletes">
+        <div class="section-title">ATHLETES</div>
+        <div class="section-sub">Click an athlete to view their full profile and fitness standards</div>
+        <div class="athletes-grid" id="athletes-grid"></div>
+      </div>
+
+      <!-- MY PROFILE -->
+      <div class="msection" id="tab-profile">
+        <div class="section-title">MY PROFILE</div>
+        <div id="profile-content"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ MODALS ══ -->
+
+  <!-- Log Score Modal -->
+  <div class="modal-bg" id="log-modal">
+    <div class="modal-box">
+      <div class="modal-title">LOG SCORE</div>
+      <div class="mfield">
+        <label>Challenge / ATC</label>
+        <select id="log-challenge"></select>
+      </div>
+      <div class="mfield">
+        <label>Score / Time / Result</label>
+        <input type="text" id="log-score" placeholder="e.g. 11:42 or 28 reps" />
+      </div>
+      <div class="mfield">
+        <label>Notes (optional)</label>
+        <textarea id="log-notes" placeholder="Any comments about your performance..."></textarea>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-outline" onclick="closeModal('log-modal')">CANCEL</button>
+        <button class="btn-admin" onclick="submitLog()">SUBMIT</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- New Challenge Modal (Admin) -->
+  <div class="modal-bg" id="new-challenge-modal">
+    <div class="modal-box">
+      <div class="modal-title">ANNOUNCE CHALLENGE</div>
+      <div class="mfield">
+        <label>Title</label>
+        <input type="text" id="nc-title" placeholder="e.g. June ATC — 2400m Run" />
+      </div>
+      <div class="mfield">
+        <label>Type</label>
+        <select id="nc-type">
+          <option value="ATC">ATC (Monthly)</option>
+          <option value="challenge">Team Challenge</option>
+        </select>
+      </div>
+      <div class="mfield">
+        <label>ATC Event (if ATC)</label>
+        <select id="nc-event">
+          <option value="2400m">2400m Run</option>
+          <option value="strength1">Strength #1</option>
+          <option value="400m">400m Run + 40m Sprint</option>
+          <option value="swim">Swim 2km</option>
+          <option value="8km">8km Run</option>
+          <option value="strength2">Strength #2</option>
+          <option value="none">N/A (Team Challenge)</option>
+        </select>
+      </div>
+      <div class="mfield">
+        <label>Description</label>
+        <textarea id="nc-desc" placeholder="What is this challenge?"></textarea>
+      </div>
+      <div class="mfield">
+        <label>Status</label>
+        <select id="nc-status">
+          <option value="active">Active Now</option>
+          <option value="upcoming">Upcoming</option>
+        </select>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-outline" onclick="closeModal('new-challenge-modal')">CANCEL</button>
+        <button class="btn-admin" onclick="submitChallenge()">ANNOUNCE</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Spot Check Trial Modal (Admin) -->
+  <div class="modal-bg" id="fitness-modal">
+    <div class="modal-box">
+      <div class="modal-title">ADD SPOT CHECK</div>
+      <div id="fitness-modal-athlete" style="font-size:12px;color:#555;letter-spacing:2px;margin-bottom:4px;"></div>
+      <div style="font-size:11px;color:#444;letter-spacing:1px;margin-bottom:16px;">This adds a new trial entry to the athlete's history. Previous trials are preserved.</div>
+
+      <div class="mfield"><label>Spot Check Date</label><input type="date" id="fm-date" /></div>
+
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:2px;color:#888;margin-bottom:10px;">AEROBIC</div>
+      <div class="mfield"><label>2400m Run (decimal time, e.g. 9.75)</label><input type="text" id="fm-2400" placeholder="Leave blank if not tested" /></div>
+      <div class="mfield"><label>8km Run (decimal time, e.g. 42.3)</label><input type="text" id="fm-8km" placeholder="Leave blank if not tested" /></div>
+      <div class="mfield"><label>Swim 2km (decimal time, e.g. 38.5)</label><input type="text" id="fm-swim" placeholder="Leave blank if not tested" /></div>
+
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:2px;color:#888;margin:14px 0 10px;">ANAEROBIC</div>
+      <div class="mfield"><label>400m Run (decimal time, e.g. 1.08)</label><input type="text" id="fm-400" placeholder="Leave blank if not tested" /></div>
+      <div class="mfield"><label>40m Sprint (seconds, e.g. 5.4)</label><input type="text" id="fm-40m" placeholder="Leave blank if not tested" /></div>
+
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:2px;color:#888;margin:14px 0 10px;">STRENGTH #1 · Bench (0.7× BW) + Pull-Ups + Sit-Ups</div>
+      <div class="mfield"><label>Bench Press (reps)</label><input type="number" id="fm-bench" placeholder="Leave blank if not tested" /></div>
+      <div class="mfield"><label>Pull-Ups (reps)</label><input type="number" id="fm-pullups" placeholder="Leave blank if not tested" /></div>
+      <div class="mfield"><label>Sit-Ups (reps)</label><input type="number" id="fm-situps" placeholder="Leave blank if not tested" /></div>
+
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:2px;color:#888;margin:14px 0 10px;">STRENGTH #2 · Push-Ups + Squats (1× BW)</div>
+      <div class="mfield"><label>Push-Ups (reps)</label><input type="number" id="fm-pushups" placeholder="Leave blank if not tested" /></div>
+      <div class="mfield"><label>Squats (reps)</label><input type="number" id="fm-squats" placeholder="Leave blank if not tested" /></div>
+
+      <div class="modal-actions">
+        <button class="btn-outline" onclick="closeModal('fitness-modal')">CANCEL</button>
+        <button class="btn-admin" onclick="saveFitness()">ADD TRIAL</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create Member Modal (Admin) -->
+  <div class="modal-bg" id="create-member-modal">
+    <div class="modal-box">
+      <div class="modal-title">CREATE MEMBER</div>
+      <div class="mfield"><label>Full Name</label><input type="text" id="cm-name" placeholder="e.g. Alex Smith" /></div>
+      <div class="mfield"><label>Username</label><input type="text" id="cm-user" placeholder="e.g. alex.smith" /></div>
+      <div class="mfield"><label>Temporary Password</label><input type="text" id="cm-pass" placeholder="Member will change on first login" /></div>
+      <div class="mfield"><label>Role</label>
+        <select id="cm-role">
+          <option value="athlete">Athlete</option>
+          <option value="admin">Admin</option>
+        </select>
+      </div>
+      <div id="cm-error" style="font-size:12px;color:#e05555;display:none;margin-bottom:8px;"></div>
+      <div class="modal-actions">
+        <button class="btn-outline" onclick="closeModal('create-member-modal')">CANCEL</button>
+        <button class="btn-admin" onclick="createMember()">CREATE</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Athlete Detail Modal -->
+  <div class="modal-bg" id="athlete-modal">
+    <div class="modal-box" style="max-width:600px;">
+      <div id="athlete-modal-body"></div>
+      <div class="modal-actions">
+        <button class="btn-outline" onclick="closeModal('athlete-modal')">CLOSE</button>
+        <button class="btn-admin" id="athlete-modal-edit-btn" style="display:none" onclick="openFitnessModal(currentAthleteKey)">+ ADD SPOT CHECK</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+// ══ DATA ══ (populated from API on load)
+const ELITE = { bench:45, pullups:30, situps:90, pushups:60, squats:40 };
+
+let users = {};
+let challenges = [];
+let feed = [];
+let philosophyText = '';
+let sessionPassword = null; // kept in memory only — never written to DOM or storage
+
+let currentUser = null;
+let currentLBEvent = 'alltime';
+let currentPublicLBEvent = 'alltime';
+let currentAthleteKey = null;
+let fitnessModalTarget = null;
+
+// ══ HELPERS ══
+function initials(name){ return name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2); }
+function fmt(v){ return v||'—'; }
+function pct(val,target){ if(!val||!target||isNaN(val)||isNaN(target)) return 0; return Math.min(100,Math.round((val/target)*100)); }
+
+// Get latest trial for a user (most recent entry)
+function latestTrial(u){ const t=(u.fitness&&u.fitness.trials)||[]; return t.length?t[0]:{}; }
+function str1Score(u){ const f=latestTrial(u); return (f.bench||0)+(f.pullups||0)+(f.situps||0); }
+function str2Score(u){ const f=latestTrial(u); return (f.pushups||0)+(f.squats||0); }
+function eventScore(key,event){
+  const u=users[key]; if(!u) return null;
+  const f=latestTrial(u);
+  switch(event){
+    case '2400m': return f.run2400?parseFloat(f.run2400):null;
+    case '8km': return f.run8km?parseFloat(f.run8km):null;
+    case 'swim': return f.swim2km?parseFloat(f.swim2km):null;
+    case '400m': return f.run400?parseFloat(f.run400):null;
+    case 'strength1': return str1Score(u)||null;
+    case 'strength2': return str2Score(u)||null;
+    default: return null;
+  }
+}
+
+// ══ LOGIN ══
+async function doLogin(){
+  const u=document.getElementById('login-user').value.trim().toLowerCase();
+  const p=document.getElementById('login-pass').value;
+  const err=document.getElementById('login-err');
+  err.style.display='none';
+  try {
+    const res=await fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:u,password:p})});
+    const data=await res.json();
+    if(data.success){
+      currentUser=u;
+      sessionPassword=p;
+      document.getElementById('login-screen').style.display='none';
+      document.getElementById('public-screen').style.display='none';
+      document.getElementById('app-screen').style.display='block';
+      document.getElementById('top-avatar').textContent=initials(users[u].name);
+      document.getElementById('top-name').textContent=users[u].name.toUpperCase();
+      if(users[u].role==='admin') document.getElementById('admin-challenge-btns').style.display='flex';
+      renderAll();
+      if(users[u].mustChangePassword) showPasswordChangePrompt();
+    } else {
+      err.textContent='Incorrect username or password.';
+      err.style.display='block';
+    }
+  } catch(e){
+    err.textContent='Connection error. Please try again.';
+    err.style.display='block';
+  }
+}
+
+async function showPasswordChangePrompt(){
+  const np=prompt('Welcome! Please set your new password:');
+  if(np&&np.length>=6){
+    const res=await fetch('/api/update-profile',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:currentUser,password:sessionPassword,targetUsername:currentUser,field:'password',value:np})});
+    const data=await res.json();
+    if(!data.error){
+      sessionPassword=np;
+      users[currentUser].mustChangePassword=false;
+      alert('Password updated. Remember it for next time!');
+    }
+  }
+}
+
+function logout(){
+  currentUser=null;
+  sessionPassword=null;
+  document.getElementById('app-screen').style.display='none';
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('public-screen').style.display='none';
+  document.getElementById('login-user').value='';
+  document.getElementById('login-pass').value='';
+  document.getElementById('admin-challenge-btns').style.display='none';
+}
+
+// ══ TABS ══
+function showTab(t){
+  document.querySelectorAll('.msection').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.mnav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+t).classList.add('active');
+  const tabs={dashboard:0,challenges:1,leaderboard:2,atc:3,athletes:4,profile:5};
+  if(tabs[t]!==undefined) document.querySelectorAll('.mnav-btn')[tabs[t]].classList.add('active');
+  if(t==='profile') renderProfile();
+  if(t==='atc') renderATC('2400m');
+}
+
+// ══ PHILOSOPHY ══
+function editPhilosophy(){
+  if(!currentUser||users[currentUser].role!=='admin') return;
+  document.getElementById('philosophy-textarea').value=philosophyText;
+  document.getElementById('philosophy-text-display').style.display='none';
+  document.getElementById('philosophy-edit-area').style.display='block';
+}
+async function savePhilosophy(){
+  const text=document.getElementById('philosophy-textarea').value;
+  await fetch('/api/update-settings',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:currentUser,password:sessionPassword,philosophyText:text})});
+  philosophyText=text;
+  document.getElementById('philosophy-text-display').textContent=philosophyText;
+  document.getElementById('philosophy-text-display').style.display='block';
+  document.getElementById('philosophy-edit-area').style.display='none';
+}
+function cancelPhilosophy(){
+  document.getElementById('philosophy-text-display').style.display='block';
+  document.getElementById('philosophy-edit-area').style.display='none';
+}
+
+// ══ ATC LEADERBOARD ══
+const ATC_EVENTS={
+  '2400m':{ label:'2400m Run', desc:'Timed 2400m run — decimal time. Lower is better.', timed:true, field:'run2400' },
+  'strength1':{ label:'Strength #1', desc:'Bench Press (0.7× BW) + Pull-Ups + Sit-Ups — combined reps. Higher is better.', timed:false },
+  '400m':{ label:'400m Run + 40m Sprint', desc:'Timed 400m run — decimal time. Lower is better.', timed:true, field:'run400' },
+  'swim':{ label:'Swim 2km', desc:'Timed 2km swim — decimal time. Lower is better.', timed:true, field:'swim2km' },
+  '8km':{ label:'8km Run', desc:'Timed 8km run — decimal time. Lower is better.', timed:true, field:'run8km' },
+  'strength2':{ label:'Strength #2', desc:'Push-Ups + Squats (1× BW) — combined reps. Higher is better.', timed:false },
+};
+
+function switchATC(event,btn){
+  document.querySelectorAll('#atc-tabs .lb-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderATC(event);
+}
+
+function renderATC(event){
+  const ev=ATC_EVENTS[event];
+  document.getElementById('atc-event-desc').textContent=ev?ev.desc:'';
+  const athleteKeys=Object.keys(users).filter(k=>users[k].role==='athlete');
+  const withScores=athleteKeys.map(k=>({key:k,score:eventScore(k,event)}));
+  const hasScore=withScores.filter(x=>x.score!==null);
+  const noScore=withScores.filter(x=>x.score===null);
+  if(ev&&ev.timed) hasScore.sort((a,b)=>a.score-b.score);
+  else hasScore.sort((a,b)=>b.score-a.score);
+  const sorted=[...hasScore,...noScore];
+  const medals=['🥇','🥈','🥉'];
+  const rankClass=['r1','r2','r3'];
+  document.getElementById('atc-lb-list').innerHTML=sorted.map(({key,score},i)=>{
+    const u=users[key];
+    return `<div class="lb-row">
+      <div class="lb-rank ${rankClass[i]||''}">${medals[i]||i+1}</div>
+      <div class="lb-av">${initials(u.name)}</div>
+      <div style="flex:1"><div class="lb-name">${u.name.toUpperCase()}</div></div>
+      <div style="text-align:right">
+        <div class="lb-score">${score!==null?score:'—'}</div>
+        <div class="lb-score-label">${ev&&ev.timed?'MIN':'REPS'}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // All-time ATC points
+  const byPoints=[...athleteKeys].sort((a,b)=>(users[b].points||0)-(users[a].points||0));
+  document.getElementById('atc-alltime-list').innerHTML=byPoints.map((k,i)=>{
+    const u=users[k];
+    return `<div class="lb-row">
+      <div class="lb-rank ${rankClass[i]||''}">${medals[i]||i+1}</div>
+      <div class="lb-av">${initials(u.name)}</div>
+      <div style="flex:1"><div class="lb-name">${u.name.toUpperCase()}</div></div>
+      <div style="text-align:right">
+        <div class="lb-score">${u.points||0}</div>
+        <div class="lb-score-label">PTS</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ══ RENDER ALL ══
+function renderAll(){
+  renderDashboard();
+  renderChallenges();
+  renderLeaderboard('alltime');
+  renderAthletes();
+  renderProfile();
+  renderPublic();
+  // Show philosophy edit btn for admin
+  const pb=document.getElementById('philosophy-admin-btn');
+  if(pb) pb.style.display=(currentUser&&users[currentUser].role==='admin')?'block':'none';
+}
+
+// ══ DASHBOARD ══
+function renderDashboard(){
+  const u=users[currentUser];
+  const active=challenges.filter(c=>c.status==='active').length;
+  const athletes=Object.keys(users).filter(k=>users[k].role==='athlete').length;
+  document.getElementById('dash-sub').textContent='Welcome back, '+u.name.toUpperCase()+'.';
+  document.getElementById('dash-stats').innerHTML=`
+    <div class="stat-block"><div class="stat-label">Active Challenges</div><div class="stat-value">${active}</div></div>
+    <div class="stat-block"><div class="stat-label">Total Athletes</div><div class="stat-value">${athletes}</div></div>
+    <div class="stat-block"><div class="stat-label">My Points</div><div class="stat-value">${u.points||0}</div></div>
+    <div class="stat-block"><div class="stat-label">My Logs</div><div class="stat-value">${(u.logs||[]).length}</div></div>
+  `;
+  document.getElementById('activity-feed').innerHTML=feed.length?feed.map(f=>`
+    <div class="feed-item">
+      <div class="feed-dot"></div>
+      <div class="feed-body">
+        <div class="feed-title">${f.name} ${f.action} <strong>${f.target}</strong></div>
+        <div class="feed-sub">${f.time}</div>
+      </div>
+    </div>
+  `).join(''):'<div style="font-size:13px;color:#444;">No recent activity.</div>';
+}
+
+// ══ CHALLENGES ══
+function renderChallenges(){
+  const isAdmin=users[currentUser].role==='admin';
+  const order={active:0,upcoming:1,completed:2};
+  const sorted=[...challenges].sort((a,b)=>order[a.status]-order[b.status]);
+  document.getElementById('challenges-list').innerHTML=sorted.map(c=>`
+    <div class="halo-card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;">
+        <div>
+          <span class="challenge-status status-${c.status}">${c.status.toUpperCase()}</span>
+          ${c.type==='ATC'?'<span style="font-size:10px;font-weight:700;letter-spacing:2px;color:#555;margin-left:8px;">ATC</span>':''}
+          <div class="challenge-title">${c.title}</div>
+        </div>
+        ${isAdmin?`<button class="btn-outline" onclick="deleteChallenge(${c.id})" style="font-size:10px;">REMOVE</button>`:''}
+      </div>
+      <div class="challenge-desc">${c.desc}</div>
+      <div class="challenge-meta">
+        <span>📅 ${c.month||''}</span>
+        ${c.type==='ATC'?'<span>🏆 Monthly ATC</span>':'<span>🎯 Team Challenge</span>'}
+      </div>
+      ${c.status==='active'&&currentUser!=='admin'?`<button class="btn-log" onclick="openLogModal(${c.id})">LOG SCORE</button>`:''}
+    </div>
+  `).join('');
+}
+
+// ══ LEADERBOARD ══
+function switchLB(event,btn){
+  document.querySelectorAll('#lb-tabs .lb-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderLeaderboard(event);
+}
+
+function renderLeaderboard(event){
+  currentLBEvent=event;
+  const athleteKeys=Object.keys(users).filter(k=>users[k].role==='athlete');
+  let sorted;
+  if(event==='alltime'){
+    sorted=[...athleteKeys].sort((a,b)=>(users[b].points||0)-(users[a].points||0));
+  } else {
+    // For timed events (lower=better): 2400m, 8km, swim, 400m
+    const timedEvents=['2400m','8km','swim','400m'];
+    const isTimed=timedEvents.includes(event);
+    const withScores=athleteKeys.map(k=>({key:k,score:eventScore(k,event)}));
+    const hasScore=withScores.filter(x=>x.score!==null);
+    const noScore=withScores.filter(x=>x.score===null);
+    if(isTimed){
+      hasScore.sort((a,b)=>a.score-b.score); // lower time = better
+    } else {
+      hasScore.sort((a,b)=>b.score-a.score); // higher reps = better
+    }
+    sorted=[...hasScore,...noScore].map(x=>x.key);
+  }
+
+  const medals=['🥇','🥈','🥉'];
+  const rankClass=['r1','r2','r3'];
+
+  document.getElementById('lb-list').innerHTML=sorted.map((k,i)=>{
+    const u=users[k];
+    const sc=event==='alltime'?(u.points||0):eventScore(k,event);
+    const scLabel=event==='alltime'?'PTS':eventLabel(event);
+    return `<div class="lb-row">
+      <div class="lb-rank ${rankClass[i]||''}">${medals[i]||i+1}</div>
+      <div class="lb-av">${initials(u.name)}</div>
+      <div style="flex:1">
+        <div class="lb-name">${u.name.toUpperCase()}</div>
+        <div class="lb-event-scores">${u.points||0} total pts</div>
+      </div>
+      <div style="text-align:right">
+        <div class="lb-score">${sc!==null?sc:'—'}</div>
+        <div class="lb-score-label">${scLabel}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function eventLabel(e){
+  const map={alltime:'PTS','2400m':'MIN','8km':'MIN',swim:'MIN','400m':'MIN',strength1:'REPS',strength2:'REPS'};
+  return map[e]||'';
+}
+
+// ══ ATHLETES ══
+function renderAthletes(){
+  const keys=Object.keys(users).filter(k=>users[k].role==='athlete');
+  document.getElementById('athletes-grid').innerHTML=keys.map(k=>{
+    const u=users[k];
+    return `<div class="athlete-card" onclick="openAthleteModal('${k}')">
+      <div class="athlete-av-lg">${initials(u.name)}</div>
+      <div class="athlete-name">${u.name.toUpperCase()}</div>
+      <div class="athlete-pts">${u.points||0} pts</div>
+    </div>`;
+  }).join('');
+}
+
+// ══ ATHLETE MODAL ══
+function trialHistoryTable(trials){
+  if(!trials||!trials.length) return '<div style="font-size:13px;color:#444;padding:8px 0;">No spot checks recorded yet.</div>';
+  return `<div style="overflow-x:auto;margin-top:8px;">
+    <table class="trial-table">
+      <thead><tr>
+        <th>Trial</th><th>Date</th>
+        <th>2400m</th><th>8km</th><th>Swim 2km</th>
+        <th>400m</th><th>40m</th>
+        <th>Bench</th><th>Pull-ups</th><th>Sit-ups</th><th>S1 Score</th>
+        <th>Push-ups</th><th>Squats</th><th>S2 Score</th>
+      </tr></thead>
+      <tbody>
+        ${trials.map((t,i)=>{
+          const s1=(t.bench||0)+(t.pullups||0)+(t.situps||0);
+          const s2=(t.pushups||0)+(t.squats||0);
+          return `<tr>
+            <td style="color:#555;">${trials.length-i}</td>
+            <td>${t.date||'—'}</td>
+            <td>${t.run2400||'—'}</td><td>${t.run8km||'—'}</td><td>${t.swim2km||'—'}</td>
+            <td>${t.run400||'—'}</td><td>${t.sprint40||'—'}</td>
+            <td>${t.bench||'—'}</td><td>${t.pullups||'—'}</td><td>${t.situps||'—'}</td>
+            <td style="color:#fff;font-weight:600;">${s1||'—'}</td>
+            <td>${t.pushups||'—'}</td><td>${t.squats||'—'}</td>
+            <td style="color:#fff;font-weight:600;">${s2||'—'}</td>
+          </tr>`;
+        }).join('')}
+      </tbody>
+    </table>
+  </div>`;
+}
+
+function openAthleteModal(key){
+  currentAthleteKey=key;
+  const u=users[key];
+  const trials=(u.fitness&&u.fitness.trials)||[];
+  const f=trials.length?trials[0]:{};
+  const isAdmin=users[currentUser].role==='admin';
+  const editBtn=document.getElementById('athlete-modal-edit-btn');
+  if(editBtn) editBtn.style.display=isAdmin?'block':'none';
+  const str1=(f.bench||0)+(f.pullups||0)+(f.situps||0);
+  const str2=(f.pushups||0)+(f.squats||0);
+
+  document.getElementById('athlete-modal-body').innerHTML=`
+    <div class="profile-header">
+      <div class="profile-av-xl">${initials(u.name)}</div>
+      <div>
+        <div class="profile-name">${u.name.toUpperCase()}</div>
+        <div class="profile-role">ATHLETE</div>
+        <div class="profile-pts">${u.points||0} points · ${trials.length} spot check${trials.length!==1?'s':''} · ${(u.logs||[]).length} logs</div>
+      </div>
+    </div>
+
+    <!-- BIO in athlete modal -->
+    <div class="fitness-section-title" style="margin-bottom:8px;">BIO
+      ${isAdmin?`<button onclick="editBio('${key}')" style="font-family:'Montserrat',sans-serif;font-size:10px;font-weight:600;letter-spacing:1px;color:#555;background:none;border:1px solid #333;border-radius:4px;padding:3px 8px;cursor:pointer;margin-left:10px;vertical-align:middle;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#555'">EDIT</button>`:''}
+    </div>
+    <div class="halo-card" style="margin-bottom:16px;">
+      <div id="bio-display-${key}" style="font-size:13px;color:${u.bio?'#aaa':'#444'};line-height:1.8;">${u.bio||'No bio added yet.'}</div>
+      ${isAdmin?`<div id="bio-edit-${key}" style="display:none;">
+        <textarea id="bio-textarea-${key}" style="width:100%;min-height:80px;background:#000;border:1px solid #333;border-radius:6px;color:#fff;font-family:'Montserrat',sans-serif;font-size:13px;padding:10px;box-sizing:border-box;resize:vertical;">${u.bio||''}</textarea>
+        <div style="display:flex;gap:10px;margin-top:10px;">
+          <button class="btn-admin" onclick="saveBio('${key}')">SAVE</button>
+          <button class="btn-outline" onclick="cancelBio('${key}')">CANCEL</button>
+        </div>
+      </div>`:''}
+    </div>
+
+    <div class="spot-note">★ Spot checks done bimonthly · Showing latest values · Full history below</div>
+
+    <div class="fitness-section-title">LATEST — AEROBIC</div>
+    <div class="fitness-grid">
+      ${fitnessItem('2400m Run',f.run2400,'min')}
+      ${fitnessItem('8km Run',f.run8km,'min')}
+      ${fitnessItem('Swim 2km',f.swim2km,'min')}
+      ${fitnessItem('400m Run',f.run400,'min')}
+      ${fitnessItem('40m Sprint',f.sprint40,'sec')}
+    </div>
+
+    <div class="fitness-section-title">LATEST — STRENGTH #1 <span style="font-size:12px;color:#555;font-family:'Montserrat',sans-serif;letter-spacing:0"> · Bench (0.7× BW) + Pull-Ups + Sit-Ups</span></div>
+    <div class="fitness-grid">
+      ${fitnessItemBar('Bench Press',f.bench,ELITE.bench,'reps')}
+      ${fitnessItemBar('Pull-Ups',f.pullups,ELITE.pullups,'reps')}
+      ${fitnessItemBar('Sit-Ups',f.situps,ELITE.situps,'reps')}
+    </div>
+    <div class="fitness-item" style="background:#0a0a0a;border:1px solid #1e1e1e;border-radius:8px;padding:12px 14px;margin-bottom:8px;">
+      <div class="fitness-label">Strength #1 Combined Score</div>
+      <div class="fitness-value">${str1||'—'}</div>
+    </div>
+
+    <div class="fitness-section-title">LATEST — STRENGTH #2 <span style="font-size:12px;color:#555;font-family:'Montserrat',sans-serif;letter-spacing:0"> · Push-Ups + Squats (1× BW)</span></div>
+    <div class="fitness-grid">
+      ${fitnessItemBar('Push-Ups',f.pushups,ELITE.pushups,'reps')}
+      ${fitnessItemBar('Squats (1× BW)',f.squats,ELITE.squats,'reps')}
+    </div>
+    <div class="fitness-item" style="background:#0a0a0a;border:1px solid #1e1e1e;border-radius:8px;padding:12px 14px;margin-bottom:16px;">
+      <div class="fitness-label">Strength #2 Combined Score</div>
+      <div class="fitness-value">${str2||'—'}</div>
+    </div>
+
+    <div class="fitness-section-title">FULL TRIAL HISTORY <span style="font-size:11px;color:#444;font-family:'Montserrat',sans-serif;letter-spacing:0;font-weight:400;"> — ${trials.length} trial${trials.length!==1?'s':''} recorded</span></div>
+    ${trialHistoryTable(trials)}
+
+    ${(u.logs||[]).length?`
+    <div class="fitness-section-title" style="margin-top:20px;">CHALLENGE LOGS</div>
+    ${u.logs.map(l=>`
+      <div class="feed-item">
+        <div class="feed-dot"></div>
+        <div class="feed-body">
+          <div class="feed-title">${l.challenge}</div>
+          <div class="feed-sub">Score: ${l.score} · ${l.date}</div>
+        </div>
+      </div>`).join('')}`:''}
+  `;
+  openModal('athlete-modal');
+}
+
+function fitnessItem(label,val,unit){
+  return `<div class="fitness-item">
+    <div class="fitness-label">${label}</div>
+    <div class="fitness-value">${val||'—'} <span style="font-size:12px;color:#555;">${val?unit:''}</span></div>
+  </div>`;
+}
+function fitnessItemBar(label,val,target,unit){
+  const p=pct(val,target);
+  return `<div class="fitness-item">
+    <div class="fitness-label">${label}</div>
+    <div class="fitness-value">${val||'—'} <span style="font-size:12px;color:#555;">${val?unit:''}</span></div>
+    <div class="fitness-target">Elite target: ${target} ${unit}</div>
+    <div class="fitness-bar"><div class="fitness-bar-fill" style="width:${p}%"></div></div>
+  </div>`;
+}
+
+// ══ MY PROFILE ══
+function renderProfile(){
+  const u=users[currentUser];
+  const trials=(u.fitness&&u.fitness.trials)||[];
+  const f=trials.length?trials[0]:{};
+  const isAdmin=u.role==='admin';
+  const str1=(f.bench||0)+(f.pullups||0)+(f.situps||0);
+  const str2=(f.pushups||0)+(f.squats||0);
+  document.getElementById('profile-content').innerHTML=`
+    <div class="profile-header">
+      <div class="profile-av-xl">${initials(u.name)}</div>
+      <div>
+        <div class="profile-name">${u.name.toUpperCase()}${isAdmin?'<span class="admin-badge">ADMIN</span>':''}</div>
+        <div class="profile-role">${isAdmin?'ADMINISTRATOR':'ATHLETE'}</div>
+        <div class="profile-pts">${u.points||0} points · ${trials.length} spot check${trials.length!==1?'s':''} · ${(u.logs||[]).length} logs</div>
+      </div>
+    </div>
+
+    ${!isAdmin?`
+    <!-- BIO SECTION -->
+    <div class="fitness-section-title">MY BIO
+      <button onclick="editBio('${currentUser}')" style="font-family:'Montserrat',sans-serif;font-size:10px;font-weight:600;letter-spacing:1px;color:#555;background:none;border:1px solid #333;border-radius:4px;padding:3px 8px;cursor:pointer;margin-left:10px;vertical-align:middle;" onmouseover="this.style.color='#fff';this.style.borderColor='#666'" onmouseout="this.style.color='#555';this.style.borderColor='#333'">EDIT</button>
+    </div>
+    <div class="halo-card" style="margin-bottom:16px;">
+      <div id="bio-display-${currentUser}" style="font-size:13px;color:${u.bio?'#aaa':'#444'};line-height:1.8;">
+        ${u.bio||'No bio yet. Click EDIT to add one.'}
+      </div>
+      <div id="bio-edit-${currentUser}" style="display:none;">
+        <textarea id="bio-textarea-${currentUser}" style="width:100%;min-height:100px;background:#000;border:1px solid #333;border-radius:6px;color:#fff;font-family:'Montserrat',sans-serif;font-size:13px;padding:10px;box-sizing:border-box;line-height:1.8;resize:vertical;">${u.bio||''}</textarea>
+        <div style="display:flex;gap:10px;margin-top:10px;">
+          <button class="btn-admin" onclick="saveBio('${currentUser}')">SAVE</button>
+          <button class="btn-outline" onclick="cancelBio('${currentUser}')">CANCEL</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STRAVA SECTION -->
+    <div class="fitness-section-title">STRAVA ACTIVITY FEED
+      <button onclick="editStrava('${currentUser}')" style="font-family:'Montserrat',sans-serif;font-size:10px;font-weight:600;letter-spacing:1px;color:#555;background:none;border:1px solid #333;border-radius:4px;padding:3px 8px;cursor:pointer;margin-left:10px;vertical-align:middle;" onmouseover="this.style.color='#fff';this.style.borderColor='#666'" onmouseout="this.style.color='#555';this.style.borderColor='#333'">LINK</button>
+    </div>
+    <div class="halo-card" style="margin-bottom:16px;">
+      <div id="strava-display-${currentUser}">
+        ${u.stravaEmbed
+          ? `<iframe src="${u.stravaEmbed}" width="100%" height="160" frameborder="0" scrolling="no" style="border-radius:8px;"></iframe>`
+          : '<div style="font-size:13px;color:#444;">No Strava linked yet. Click LINK to add your Strava embed URL.</div>'}
+      </div>
+      <div id="strava-edit-${currentUser}" style="display:none;">
+        <div style="font-size:11px;color:#555;margin-bottom:8px;line-height:1.6;">Paste your Strava profile embed URL. On Strava: go to your profile page → Share your activities → copy the src URL from the embed code (starts with https://www.strava.com/athletes/...).</div>
+        <input type="text" id="strava-input-${currentUser}" value="${u.stravaEmbed||''}" placeholder="https://www.strava.com/athletes/XXXXXXX/activity-summary/..." style="width:100%;padding:10px;background:#000;border:1px solid #333;border-radius:6px;color:#fff;font-size:12px;box-sizing:border-box;" />
+        <div style="display:flex;gap:10px;margin-top:10px;">
+          <button class="btn-admin" onclick="saveStrava('${currentUser}')">SAVE</button>
+          <button class="btn-outline" onclick="cancelStrava('${currentUser}')">CANCEL</button>
+        </div>
+      </div>
+    </div>
+    `:''}
+
+    ${isAdmin?`
+      <div class="halo-card" style="margin-bottom:20px;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:3px;color:#555;margin-bottom:14px;">ADMIN TOOLS</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn-admin" onclick="showTab('challenges');openModal('new-challenge-modal')">+ ANNOUNCE CHALLENGE</button>
+          <button class="btn-admin" onclick="openModal('create-member-modal')">+ CREATE MEMBER</button>
+          <button class="btn-admin" onclick="openPhilosophyEdit()">EDIT PHILOSOPHY</button>
+        </div>
+      </div>
+    `:!isAdmin?`
+      <div class="spot-note">★ Spot checks done bimonthly · Contact admin to add a new trial</div>
+      <div class="fitness-section-title">LATEST FITNESS — AEROBIC</div>
+      <div class="fitness-grid">
+        ${fitnessItem('2400m Run',f.run2400,'min')}
+        ${fitnessItem('8km Run',f.run8km,'min')}
+        ${fitnessItem('Swim 2km',f.swim2km,'min')}
+        ${fitnessItem('400m Run',f.run400,'min')}
+        ${fitnessItem('40m Sprint',f.sprint40,'sec')}
+      </div>
+      <div class="fitness-section-title">LATEST — STRENGTH #1</div>
+      <div class="fitness-grid">
+        ${fitnessItemBar('Bench Press',f.bench,ELITE.bench,'reps')}
+        ${fitnessItemBar('Pull-Ups',f.pullups,ELITE.pullups,'reps')}
+        ${fitnessItemBar('Sit-Ups',f.situps,ELITE.situps,'reps')}
+      </div>
+      <div class="fitness-item" style="background:#0a0a0a;border:1px solid #1e1e1e;border-radius:8px;padding:12px 14px;margin-bottom:8px;">
+        <div class="fitness-label">Strength #1 Combined Score</div>
+        <div class="fitness-value">${str1||'—'}</div>
+      </div>
+      <div class="fitness-section-title">LATEST — STRENGTH #2</div>
+      <div class="fitness-grid">
+        ${fitnessItemBar('Push-Ups',f.pushups,ELITE.pushups,'reps')}
+        ${fitnessItemBar('Squats (1× BW)',f.squats,ELITE.squats,'reps')}
+      </div>
+      <div class="fitness-item" style="background:#0a0a0a;border:1px solid #1e1e1e;border-radius:8px;padding:12px 14px;margin-bottom:16px;">
+        <div class="fitness-label">Strength #2 Combined Score</div>
+        <div class="fitness-value">${str2||'—'}</div>
+      </div>
+      <div class="fitness-section-title">FULL TRIAL HISTORY <span style="font-size:11px;color:#444;font-family:'Montserrat',sans-serif;letter-spacing:0;font-weight:400;"> — ${trials.length} trial${trials.length!==1?'s':''} recorded</span></div>
+      ${trialHistoryTable(trials)}
+    `:''}
+    ${!isAdmin&&(u.logs||[]).length?`
+      <div class="fitness-section-title" style="margin-top:20px;">MY CHALLENGE LOGS</div>
+      <div class="halo-card">
+        ${u.logs.map(l=>`<div class="feed-item">
+          <div class="feed-dot"></div>
+          <div class="feed-body">
+            <div class="feed-title">${l.challenge}</div>
+            <div class="feed-sub">Score: ${l.score} · ${l.date}</div>
+          </div>
+        </div>`).join('')}
+      </div>
+    `:''}
+  `;
+}
+
+// ══ LOG SCORE ══
+function openLogModal(cid){
+  const active=challenges.filter(c=>c.status==='active');
+  const sel=document.getElementById('log-challenge');
+  sel.innerHTML=active.map(c=>`<option value="${c.id}" ${c.id===cid?'selected':''}>${c.title}</option>`).join('');
+  document.getElementById('log-score').value='';
+  document.getElementById('log-notes').value='';
+  openModal('log-modal');
+}
+async function submitLog(){
+  const cid=parseInt(document.getElementById('log-challenge').value);
+  const score=document.getElementById('log-score').value.trim();
+  if(!score){alert('Please enter a score or result.');return;}
+  try{
+    const res=await fetch('/api/log-score',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:currentUser,password:sessionPassword,challengeId:cid,score,notes:document.getElementById('log-notes').value.trim()})});
+    const data=await res.json();
+    if(data.error){alert('Error saving score: '+data.error);return;}
+    if(data.updatedMember) users[currentUser]={...users[currentUser],...data.updatedMember};
+    if(data.updatedFeed) feed=data.updatedFeed;
+    closeModal('log-modal');
+    renderAll();
+    showTab('profile');
+  }catch(e){alert('Connection error. Please try again.');}
+}
+
+// ══ NEW CHALLENGE ══
+async function submitChallenge(){
+  const title=document.getElementById('nc-title').value.trim();
+  const type=document.getElementById('nc-type').value;
+  const event=document.getElementById('nc-event').value;
+  const desc=document.getElementById('nc-desc').value.trim();
+  const status=document.getElementById('nc-status').value;
+  if(!title){alert('Please enter a title.');return;}
+  try{
+    const res=await fetch('/api/save-challenge',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:currentUser,password:sessionPassword,action:'create',challenge:{title,type,event,desc:desc||'No description.',status}})});
+    const data=await res.json();
+    if(data.error){alert('Error saving challenge: '+data.error);return;}
+    challenges=data.challenges;
+    if(data.feed) feed=data.feed;
+    closeModal('new-challenge-modal');
+    document.getElementById('nc-title').value='';
+    document.getElementById('nc-desc').value='';
+    renderAll();
+    showTab('challenges');
+  }catch(e){alert('Connection error. Please try again.');}
+}
+
+async function deleteChallenge(id){
+  if(!confirm('Remove this challenge?')) return;
+  try{
+    const res=await fetch('/api/save-challenge',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:currentUser,password:sessionPassword,action:'delete',challengeId:id})});
+    const data=await res.json();
+    if(data.error){alert('Error removing challenge: '+data.error);return;}
+    challenges=data.challenges;
+    renderAll();
+  }catch(e){alert('Connection error. Please try again.');}
+}
+
+// ══ FITNESS TRIALS (Admin) ══
+function openFitnessModal(key){
+  fitnessModalTarget=key;
+  const u=users[key];
+  document.getElementById('fitness-modal-athlete').textContent=u.name.toUpperCase();
+  // Clear all fields
+  ['fm-2400','fm-8km','fm-swim','fm-400','fm-40m','fm-bench','fm-pullups','fm-situps','fm-pushups','fm-squats'].forEach(id=>{
+    document.getElementById(id).value='';
+  });
+  // Default date to today
+  const today=new Date();
+  document.getElementById('fm-date').value=today.toISOString().split('T')[0];
+  closeModal('athlete-modal');
+  openModal('fitness-modal');
+}
+
+async function saveFitness(){
+  if(!fitnessModalTarget) return;
+  const rawDate=document.getElementById('fm-date').value;
+  let dateStr='';
+  if(rawDate){
+    const d=new Date(rawDate+'T12:00:00');
+    const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    dateStr=months[d.getMonth()]+' '+d.getDate()+' '+d.getFullYear();
+  } else {
+    const now=new Date();
+    const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    dateStr=months[now.getMonth()]+' '+now.getDate()+' '+now.getFullYear();
+  }
+  const trial={
+    date:dateStr,
+    run2400:document.getElementById('fm-2400').value.trim()||'',
+    run8km:document.getElementById('fm-8km').value.trim()||'',
+    swim2km:document.getElementById('fm-swim').value.trim()||'',
+    run400:document.getElementById('fm-400').value.trim()||'',
+    sprint40:document.getElementById('fm-40m').value.trim()||'',
+    bench:parseInt(document.getElementById('fm-bench').value)||0,
+    pullups:parseInt(document.getElementById('fm-pullups').value)||0,
+    situps:parseInt(document.getElementById('fm-situps').value)||0,
+    pushups:parseInt(document.getElementById('fm-pushups').value)||0,
+    squats:parseInt(document.getElementById('fm-squats').value)||0,
+  };
+  try{
+    const res=await fetch('/api/save-trial',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:currentUser,password:sessionPassword,targetUsername:fitnessModalTarget,trial})});
+    const data=await res.json();
+    if(data.error){alert('Error saving trial: '+data.error);return;}
+    if(data.updatedMember) users[fitnessModalTarget]={...users[fitnessModalTarget],...data.updatedMember};
+    if(data.updatedFeed) feed=data.updatedFeed;
+    closeModal('fitness-modal');
+    renderAll();
+  }catch(e){alert('Connection error. Please try again.');}
+}
+
+// ══ CREATE MEMBER (Admin) ══
+async function createMember(){
+  const name=document.getElementById('cm-name').value.trim();
+  const user=document.getElementById('cm-user').value.trim().toLowerCase();
+  const pass=document.getElementById('cm-pass').value.trim();
+  const role=document.getElementById('cm-role').value;
+  const errEl=document.getElementById('cm-error');
+  if(!name||!user||!pass){errEl.textContent='All fields are required.';errEl.style.display='block';return;}
+  try{
+    const res=await fetch('/api/create-member',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:currentUser,password:sessionPassword,name,newUsername:user,newPassword:pass,role})});
+    const data=await res.json();
+    if(data.error){errEl.textContent=data.error;errEl.style.display='block';return;}
+    users[user]=data.newMember;
+    if(data.feed) feed=data.feed;
+    errEl.style.display='none';
+    document.getElementById('cm-name').value='';
+    document.getElementById('cm-user').value='';
+    document.getElementById('cm-pass').value='';
+    closeModal('create-member-modal');
+    renderAll();
+    alert('Member created!\nUsername: '+user+'\nTemp password: '+pass+'\nThey will be prompted to set a new password on first login.');
+  }catch(e){errEl.textContent='Connection error. Please try again.';errEl.style.display='block';}
+}
+
+// ══ BIO FUNCTIONS ══
+function editBio(key){
+  document.getElementById('bio-display-'+key).style.display='none';
+  const el=document.getElementById('bio-edit-'+key);
+  if(el){ el.style.display='block'; document.getElementById('bio-textarea-'+key).value=users[key].bio||''; }
+}
+async function saveBio(key){
+  const ta=document.getElementById('bio-textarea-'+key);
+  if(!ta) return;
+  const bio=ta.value.trim();
+  await fetch('/api/update-profile',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:currentUser,password:sessionPassword,targetUsername:key,field:'bio',value:bio})});
+  users[key].bio=bio;
+  const disp=document.getElementById('bio-display-'+key);
+  if(disp){ disp.textContent=bio||'No bio yet.'; disp.style.color=bio?'#aaa':'#444'; disp.style.display='block'; }
+  document.getElementById('bio-edit-'+key).style.display='none';
+}
+function cancelBio(key){
+  const disp=document.getElementById('bio-display-'+key);
+  if(disp) disp.style.display='block';
+  const el=document.getElementById('bio-edit-'+key);
+  if(el) el.style.display='none';
+}
+
+// ══ STRAVA FUNCTIONS ══
+function editStrava(key){
+  document.getElementById('strava-display-'+key).style.display='none';
+  document.getElementById('strava-edit-'+key).style.display='block';
+  document.getElementById('strava-input-'+key).value=users[key].stravaEmbed||'';
+}
+async function saveStrava(key){
+  const val=document.getElementById('strava-input-'+key).value.trim();
+  await fetch('/api/update-profile',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:currentUser,password:sessionPassword,targetUsername:key,field:'strava',value:val})});
+  users[key].stravaEmbed=val;
+  const disp=document.getElementById('strava-display-'+key);
+  if(disp) disp.innerHTML=val
+    ? `<iframe src="${val}" width="100%" height="160" frameborder="0" scrolling="no" style="border-radius:8px;"></iframe>`
+    : '<div style="font-size:13px;color:#444;">No Strava linked.</div>';
+  disp.style.display='block';
+  document.getElementById('strava-edit-'+key).style.display='none';
+}
+function cancelStrava(key){
+  document.getElementById('strava-display-'+key).style.display='block';
+  document.getElementById('strava-edit-'+key).style.display='none';
+}
+
+// ══ PHILOSOPHY EDIT (admin from profile page) ══
+function openPhilosophyEdit(){
+  // The philosophy editor lives in the public screen, which is hidden while
+  // logged in — reveal it so the admin can edit, then open the editor.
+  document.getElementById('public-screen').style.display='block';
+  document.getElementById('philosophy-textarea').value=philosophyText;
+  document.getElementById('philosophy-text-display').style.display='none';
+  document.getElementById('philosophy-edit-area').style.display='block';
+  document.getElementById('philosophy-section').scrollIntoView({behavior:'smooth'});
+}
+
+// ══ PUBLIC RENDER ══
+function renderPublic(){
+  renderPublicLB('alltime');
+  renderPublicChallenges();
+}
+
+function switchPublicLB(event,btn){
+  document.querySelectorAll('#public-screen .lb-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderPublicLB(event);
+}
+
+function renderPublicLB(event){
+  currentPublicLBEvent=event;
+  const athleteKeys=Object.keys(users).filter(k=>users[k].role==='athlete');
+  let sorted;
+  if(event==='alltime'){
+    sorted=[...athleteKeys].sort((a,b)=>(users[b].points||0)-(users[a].points||0));
+  } else {
+    const timedEvents=['2400m','8km','swim','400m'];
+    const isTimed=timedEvents.includes(event);
+    const withScores=athleteKeys.map(k=>({key:k,score:eventScore(k,event)}));
+    const hasScore=withScores.filter(x=>x.score!==null);
+    const noScore=withScores.filter(x=>x.score===null);
+    if(isTimed) hasScore.sort((a,b)=>a.score-b.score);
+    else hasScore.sort((a,b)=>b.score-a.score);
+    sorted=[...hasScore,...noScore].map(x=>x.key);
+  }
+  const medals=['🥇','🥈','🥉'];
+  const rankClass=['r1','r2','r3'];
+  document.getElementById('public-lb-list').innerHTML=sorted.map((k,i)=>{
+    const u=users[k];
+    const sc=event==='alltime'?(u.points||0):eventScore(k,event);
+    return `<div class="lb-row">
+      <div class="lb-rank ${rankClass[i]||''}">${medals[i]||i+1}</div>
+      <div class="lb-av">${initials(u.name)}</div>
+      <div style="flex:1"><div class="lb-name">${u.name.toUpperCase()}</div></div>
+      <div style="text-align:right">
+        <div class="lb-score">${sc!==null?sc:'—'}</div>
+        <div class="lb-score-label">${eventLabel(event)}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderPublicChallenges(){
+  const active=challenges.filter(c=>c.status==='active'||c.status==='upcoming');
+  document.getElementById('public-challenges-list').innerHTML=active.map(c=>`
+    <div class="halo-card">
+      <span class="challenge-status status-${c.status}">${c.status.toUpperCase()}</span>
+      ${c.type==='ATC'?'<span style="font-size:10px;font-weight:700;letter-spacing:2px;color:#555;margin-left:8px;">ATC</span>':''}
+      <div class="challenge-title">${c.title}</div>
+      <div class="challenge-desc">${c.desc}</div>
+      <div class="challenge-meta"><span>📅 ${c.month||''}</span></div>
+    </div>
+  `).join('');
+}
+
+// ══ MODAL HELPERS ══
+function openModal(id){ document.getElementById(id).classList.add('open'); }
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+
+// ══ INIT ══
+async function loadInitialData(){
+  try{
+    const res=await fetch('/api/get-data');
+    const data=await res.json();
+    users=data.members||{};
+    challenges=data.challenges||[];
+    feed=data.feed||[];
+    philosophyText=data.philosophyText||'';
+    document.getElementById('philosophy-text-display').textContent=philosophyText;
+    document.getElementById('public-screen').style.display='block';
+    renderPublic();
+  }catch(e){
+    // Fallback: show public screen with empty state if API unreachable
+    document.getElementById('public-screen').style.display='block';
+    console.error('Failed to load data:',e);
+  }
+}
+loadInitialData();
+
+// Enter key on login
+document.addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&document.getElementById('login-screen').style.display!=='none') doLogin();
+});
+</script>
+
+</body>
+</html>
