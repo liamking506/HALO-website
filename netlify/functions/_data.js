@@ -55,7 +55,14 @@ const SEED_SETTINGS = {
 };
 
 // ── Store accessors ──
-function ds() { return getStore(STORE); }
+// Netlify normally injects Blobs credentials automatically. When it doesn't
+// (MissingBlobsEnvironmentError), fall back to manual config via env vars.
+function ds() {
+  const siteID = process.env.HALO_BLOBS_SITE_ID;
+  const token = process.env.HALO_BLOBS_TOKEN;
+  if (siteID && token) return getStore({ name: STORE, siteID, token });
+  return getStore(STORE);
+}
 
 async function getMembers() {
   const v = await ds().get('members', { type: 'json' });
