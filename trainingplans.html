@@ -892,6 +892,7 @@
       <div id="athlete-modal-body"></div>
       <div class="modal-actions">
         <button class="btn-outline" onclick="closeModal('athlete-modal')">CLOSE</button>
+        <button class="btn-outline" id="athlete-modal-reset-btn" style="display:none" onclick="resetMemberPassword(currentAthleteKey)">RESET PASSWORD</button>
         <button class="btn-admin" id="athlete-modal-edit-btn" style="display:none" onclick="openFitnessModal(currentAthleteKey)">+ ADD SPOT CHECK</button>
       </div>
     </div>
@@ -1208,7 +1209,7 @@ function renderAthletes(){
 }
 
 // ══ ATHLETE MODAL ══
-function trialHistoryTable(trials){
+function trialHistoryTable(trials,allowDelete,key){
   if(!trials||!trials.length) return '<div style="font-size:13px;color:#444;padding:8px 0;">No spot checks recorded yet.</div>';
   return `<div style="overflow-x:auto;margin-top:8px;">
     <table class="trial-table">
@@ -1218,6 +1219,7 @@ function trialHistoryTable(trials){
         <th>400m</th><th>40m</th>
         <th>Bench</th><th>Pull-ups</th><th>Sit-ups</th><th>S1 Score</th>
         <th>Push-ups</th><th>Squats</th><th>S2 Score</th>
+        ${allowDelete?'<th></th>':''}
       </tr></thead>
       <tbody>
         ${trials.map((t,i)=>{
@@ -1232,6 +1234,7 @@ function trialHistoryTable(trials){
             <td style="color:#fff;font-weight:600;">${s1||'—'}</td>
             <td>${t.pushups||'—'}</td><td>${t.squats||'—'}</td>
             <td style="color:#fff;font-weight:600;">${s2||'—'}</td>
+            ${allowDelete?`<td><button onclick="deleteScore('trial','${key}',${i})" title="Delete this spot check" style="background:none;border:1px solid #3a2020;color:#a05555;border-radius:6px;padding:2px 8px;cursor:pointer;font-size:12px;" onmouseover="this.style.color='#fff';this.style.background='#7a2020';this.style.borderColor='#7a2020'" onmouseout="this.style.color='#a05555';this.style.background='none';this.style.borderColor='#3a2020'">✕</button></td>`:''}
           </tr>`;
         }).join('')}
       </tbody>
@@ -1247,6 +1250,8 @@ function openAthleteModal(key){
   const isAdmin=users[currentUser].role==='admin';
   const editBtn=document.getElementById('athlete-modal-edit-btn');
   if(editBtn) editBtn.style.display=isAdmin?'block':'none';
+  const resetBtn=document.getElementById('athlete-modal-reset-btn');
+  if(resetBtn) resetBtn.style.display=isAdmin?'block':'none';
   const str1=(f.bench||0)+(f.pullups||0)+(f.situps||0);
   const str2=(f.pushups||0)+(f.squats||0);
 
@@ -1308,17 +1313,18 @@ function openAthleteModal(key){
     </div>
 
     <div class="fitness-section-title">FULL TRIAL HISTORY <span style="font-size:11px;color:#444;font-family:'Montserrat',sans-serif;letter-spacing:0;font-weight:400;"> — ${trials.length} trial${trials.length!==1?'s':''} recorded</span></div>
-    ${trialHistoryTable(trials)}
+    ${trialHistoryTable(trials,isAdmin,key)}
 
     ${(u.logs||[]).length?`
     <div class="fitness-section-title" style="margin-top:20px;">CHALLENGE LOGS</div>
-    ${u.logs.map(l=>`
+    ${u.logs.map((l,i)=>`
       <div class="feed-item">
         <div class="feed-dot"></div>
         <div class="feed-body">
           <div class="feed-title">${l.challenge}</div>
           <div class="feed-sub">Score: ${l.score} · ${l.date}</div>
         </div>
+        ${isAdmin?`<button onclick="deleteScore('log','${key}',${i})" title="Delete this score" style="align-self:center;background:none;border:1px solid #3a2020;color:#a05555;border-radius:6px;padding:4px 10px;cursor:pointer;font-size:12px;" onmouseover="this.style.color='#fff';this.style.background='#7a2020';this.style.borderColor='#7a2020'" onmouseout="this.style.color='#a05555';this.style.background='none';this.style.borderColor='#3a2020'">✕</button>`:''}
       </div>`).join('')}`:''}
   `;
   openModal('athlete-modal');
@@ -1404,6 +1410,7 @@ function renderProfile(){
           <button class="btn-admin" onclick="showTab('challenges');openModal('new-challenge-modal')">+ ANNOUNCE CHALLENGE</button>
           <button class="btn-admin" onclick="openModal('create-member-modal')">+ CREATE MEMBER</button>
           <button class="btn-admin" onclick="openPhilosophyEdit()">EDIT PHILOSOPHY</button>
+          <button class="btn-outline" onclick="changeOwnPassword()">CHANGE MY PASSWORD</button>
         </div>
       </div>
     `:!isAdmin?`
@@ -1700,6 +1707,52 @@ function renderPublicChallenges(){
       <div class="challenge-meta"><span>📅 ${c.month||''}</span></div>
     </div>
   `).join('');
+}
+
+// ══ DELETE SCORE (Admin) ══
+async function deleteScore(type,key,index){
+  const label=type==='trial'?'spot-check trial':'challenge score';
+  let msg='Delete this '+label+'? This cannot be undone.';
+  if(type==='log') msg+='\n\n(This will also remove the 50 points it awarded.)';
+  if(!confirm(msg)) return;
+  try{
+    const res=await fetch('/api/delete-score',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:currentUser,password:sessionPassword,targetUsername:key,type,index})});
+    const data=await res.json();
+    if(data.error){alert('Error deleting: '+data.error);return;}
+    if(data.updatedMember) users[key]={...users[key],...data.updatedMember};
+    renderAll();
+    openAthleteModal(key); // refresh the open modal so the row disappears
+  }catch(e){alert('Connection error. Please try again.');}
+}
+
+// ══ CHANGE OWN PASSWORD ══
+async function changeOwnPassword(){
+  const np=prompt('Enter your new password (at least 6 characters):');
+  if(!np) return;
+  if(np.length<6){alert('Password must be at least 6 characters.');return;}
+  try{
+    const res=await fetch('/api/update-profile',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:currentUser,password:sessionPassword,targetUsername:currentUser,field:'password',value:np})});
+    const data=await res.json();
+    if(data.error){alert('Error: '+data.error);return;}
+    sessionPassword=np;
+    if(users[currentUser]) users[currentUser].mustChangePassword=false;
+    alert('Password updated. Remember it for next time!');
+  }catch(e){alert('Connection error. Please try again.');}
+}
+
+// ══ ADMIN RESET A MEMBER'S PASSWORD ══
+async function resetMemberPassword(key){
+  const u=users[key]; if(!u) return;
+  const np=prompt('Set a new temporary password for '+u.name+' (at least 6 characters).\nThey will be asked to change it on their next login:');
+  if(!np) return;
+  if(np.length<6){alert('Password must be at least 6 characters.');return;}
+  try{
+    const res=await fetch('/api/update-profile',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:currentUser,password:sessionPassword,targetUsername:key,field:'resetPassword',value:np})});
+    const data=await res.json();
+    if(data.error){alert('Error: '+data.error);return;}
+    if(data.updatedMember) users[key]={...users[key],...data.updatedMember};
+    alert('Password reset for '+u.name+'.\nTemp password: '+np+'\nThey will set their own password on next login.');
+  }catch(e){alert('Connection error. Please try again.');}
 }
 
 // ══ MODAL HELPERS ══

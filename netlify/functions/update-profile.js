@@ -23,6 +23,12 @@ exports.handler = async (event) => {
     if (!value || value.length < 6) return badReq('Password must be at least 6 characters');
     u.password = value;
     u.mustChangePassword = false;
+  } else if (field === 'resetPassword') {
+    // Admin-only: set a temp password the member must change on next login
+    if (!isAdmin) return unauth('Admin only');
+    if (!value || value.length < 6) return badReq('Password must be at least 6 characters');
+    u.password = value;
+    u.mustChangePassword = true;
   } else {
     return badReq('Unknown field');
   }
