@@ -16,7 +16,6 @@ exports.handler = async (event) => {
     points: 0,
     mustChangePassword: true,
     bio: '',
-    stravaEmbed: '',
     logs: [],
     fitness: { trials: [] },
   };

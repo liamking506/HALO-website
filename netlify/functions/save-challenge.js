@@ -27,6 +27,21 @@ exports.handler = async (event) => {
     };
     challenges.unshift(newChallenge);
     feed.unshift({ name: 'Admin', action: 'announced', target: newChallenge.title, time: 'Just now' });
+  } else if (action === 'edit') {
+    if (!challengeId) return badReq('Missing challengeId');
+    if (!challenge || !challenge.title) return badReq('Missing challenge data');
+    const idx = challenges.findIndex(c => c.id === challengeId);
+    if (idx === -1) return badReq('Challenge not found');
+    // Preserve id and month; update the editable fields
+    challenges[idx] = {
+      ...challenges[idx],
+      title: challenge.title,
+      type: challenge.type || 'ATC',
+      event: challenge.event || 'none',
+      desc: challenge.desc || 'No description.',
+      status: challenge.status || 'active',
+    };
+    feed.unshift({ name: 'Admin', action: 'updated', target: challenge.title, time: 'Just now' });
   } else if (action === 'delete') {
     if (!challengeId) return badReq('Missing challengeId');
     challenges = challenges.filter(c => c.id !== challengeId);

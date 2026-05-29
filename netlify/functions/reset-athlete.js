@@ -9,7 +9,7 @@ exports.handler = async (event) => {
   if (!checkAdmin(members, username, password)) return unauth('Admin only');
   if (!members[targetUsername]) return badReq('Target member not found');
 
-  // Wipe performance data; keep login, name, role, bio, strava
+  // Wipe performance data; keep login, name, role, bio
   const u = members[targetUsername];
   u.points = 0;
   u.logs = [];

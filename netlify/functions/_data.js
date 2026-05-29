@@ -5,7 +5,7 @@ const STORE = 'halo-data';
 
 // ── Seed data (used only on first deploy when blobs are empty) ──
 const SEED_MEMBERS = {
-  admin: { name:'Admin', password:'halo2025', role:'admin', points:0, logs:[], fitness:{trials:[]}, mustChangePassword:false, bio:'', stravaEmbed:'' },
+  admin: { name:'Admin', password:'halo2025', role:'admin', points:0, logs:[], fitness:{trials:[]}, mustChangePassword:false, bio:'' },
   logan: { name:'Logan Stewart', password:'changeme', role:'athlete', points:420, mustChangePassword:true,
     logs:[
       {challenge:'June ATC — 2400m Run', score:'9.75', date:'Jun 1 2025'},
@@ -15,26 +15,23 @@ const SEED_MEMBERS = {
       { date:'Jun 3 2025', run2400:'9.75', run8km:'', swim2km:'', run400:'', sprint40:'', bench:28, pullups:22, situps:74, pushups:48, squats:32 },
       { date:'Apr 1 2025', run2400:'10.10', run8km:'', swim2km:'', run400:'', sprint40:'', bench:25, pullups:19, situps:68, pushups:44, squats:28 },
     ]},
-    bio:'', stravaEmbed:''
-  },
+    bio:''  },
   chase: { name:'Chase Hobenshield', password:'changeme', role:'athlete', points:380, mustChangePassword:true,
     logs:[{challenge:'June ATC — 2400m Run', score:'10.20', date:'Jun 1 2025'}],
     fitness:{ trials:[
       { date:'Jun 1 2025', run2400:'10.20', run8km:'', swim2km:'', run400:'', sprint40:'', bench:24, pullups:18, situps:68, pushups:52, squats:28 },
     ]},
-    bio:'', stravaEmbed:''
-  },
+    bio:''  },
   max: { name:'Max Hooper', password:'changeme', role:'athlete', points:310, mustChangePassword:true,
     logs:[],
     fitness:{ trials:[
       { date:'Jun 1 2025', run2400:'', run8km:'', swim2km:'', run400:'', sprint40:'', bench:20, pullups:15, situps:60, pushups:44, squats:25 },
     ]},
-    bio:'', stravaEmbed:''
-  },
-  stephanie: { name:'Stephanie Sinclair', password:'changeme', role:'athlete', points:290, mustChangePassword:true, logs:[], fitness:{trials:[]}, bio:'', stravaEmbed:'' },
-  nathan:    { name:'Nathan James Stewart', password:'theseedofmars', role:'athlete', points:260, mustChangePassword:true, logs:[], fitness:{trials:[]}, bio:'', stravaEmbed:'' },
-  francois:  { name:'François Jeraj', password:'changeme', role:'athlete', points:240, mustChangePassword:true, logs:[], fitness:{trials:[]}, bio:'', stravaEmbed:'' },
-  marcus:    { name:'Marcus Cheng', password:'changeme', role:'athlete', points:210, mustChangePassword:true, logs:[], fitness:{trials:[]}, bio:'', stravaEmbed:'' },
+    bio:''  },
+  stephanie: { name:'Stephanie Sinclair', password:'changeme', role:'athlete', points:290, mustChangePassword:true, logs:[], fitness:{trials:[]}, bio:'' },
+  nathan:    { name:'Nathan James Stewart', password:'theseedofmars', role:'athlete', points:260, mustChangePassword:true, logs:[], fitness:{trials:[]}, bio:'' },
+  francois:  { name:'François Jeraj', password:'changeme', role:'athlete', points:240, mustChangePassword:true, logs:[], fitness:{trials:[]}, bio:'' },
+  marcus:    { name:'Marcus Cheng', password:'changeme', role:'athlete', points:210, mustChangePassword:true, logs:[], fitness:{trials:[]}, bio:'' },
 };
 
 const SEED_CHALLENGES = [

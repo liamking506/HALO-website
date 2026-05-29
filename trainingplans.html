@@ -703,7 +703,7 @@
             <div class="section-sub">Monthly ATCs and spot checks</div>
           </div>
           <div style="display:none;gap:10px;align-items:center;" id="admin-challenge-btns">
-            <button class="btn-admin" onclick="openModal('new-challenge-modal')">+ NEW CHALLENGE</button>
+            <button class="btn-admin" onclick="openNewChallenge()">+ NEW CHALLENGE</button>
           </div>
         </div>
         <div id="challenges-list"></div>
@@ -791,7 +791,7 @@
   <!-- New Challenge Modal (Admin) -->
   <div class="modal-bg" id="new-challenge-modal">
     <div class="modal-box">
-      <div class="modal-title">ANNOUNCE CHALLENGE</div>
+      <div class="modal-title" id="nc-modal-title">ANNOUNCE CHALLENGE</div>
       <div class="mfield">
         <label>Title</label>
         <input type="text" id="nc-title" placeholder="e.g. June ATC — 2400m Run" />
@@ -824,11 +824,12 @@
         <select id="nc-status">
           <option value="active">Active Now</option>
           <option value="upcoming">Upcoming</option>
+          <option value="completed">Completed</option>
         </select>
       </div>
       <div class="modal-actions">
         <button class="btn-outline" onclick="closeModal('new-challenge-modal')">CANCEL</button>
-        <button class="btn-admin" onclick="submitChallenge()">ANNOUNCE</button>
+        <button class="btn-admin" id="nc-submit-btn" onclick="submitChallenge()">ANNOUNCE</button>
       </div>
     </div>
   </div>
@@ -1192,7 +1193,7 @@ function renderDashboard(){
 
 // ══ CHALLENGES ══
 function renderChallenges(){
-  const isAdmin=users[currentUser].role==='admin';
+  const isAdmin=currentUser&&users[currentUser]&&users[currentUser].role==='admin';
   const order={active:0,upcoming:1,completed:2};
   const sorted=[...challenges].sort((a,b)=>order[a.status]-order[b.status]);
   document.getElementById('challenges-list').innerHTML=sorted.map(c=>`
@@ -1203,7 +1204,10 @@ function renderChallenges(){
           ${c.type==='ATC'?'<span style="font-size:10px;font-weight:700;letter-spacing:2px;color:#555;margin-left:8px;">ATC</span>':''}
           <div class="challenge-title">${c.title}</div>
         </div>
-        ${isAdmin?`<button class="btn-outline" onclick="deleteChallenge(${c.id})" style="font-size:10px;">REMOVE</button>`:''}
+        ${isAdmin?`<div style="display:flex;gap:6px;">
+          <button class="btn-outline" onclick="openEditChallenge(${c.id})" style="font-size:10px;">EDIT</button>
+          <button class="btn-outline" onclick="deleteChallenge(${c.id})" style="font-size:10px;">REMOVE</button>
+        </div>`:''}
       </div>
       <div class="challenge-desc">${c.desc}</div>
       <div class="challenge-meta">
@@ -1453,33 +1457,13 @@ function renderProfile(){
         </div>
       </div>
     </div>
-
-    <!-- STRAVA SECTION -->
-    <div class="fitness-section-title">STRAVA ACTIVITY FEED
-      <button onclick="editStrava('${currentUser}')" style="font-family:'Montserrat',sans-serif;font-size:10px;font-weight:600;letter-spacing:1px;color:#555;background:none;border:1px solid #333;border-radius:4px;padding:3px 8px;cursor:pointer;margin-left:10px;vertical-align:middle;" onmouseover="this.style.color='#fff';this.style.borderColor='#666'" onmouseout="this.style.color='#555';this.style.borderColor='#333'">LINK</button>
-    </div>
-    <div class="halo-card" style="margin-bottom:16px;">
-      <div id="strava-display-${currentUser}">
-        ${u.stravaEmbed
-          ? `<iframe src="${u.stravaEmbed}" width="100%" height="160" frameborder="0" scrolling="no" style="border-radius:8px;"></iframe>`
-          : '<div style="font-size:13px;color:#444;">No Strava linked yet. Click LINK to add your Strava embed URL.</div>'}
-      </div>
-      <div id="strava-edit-${currentUser}" style="display:none;">
-        <div style="font-size:11px;color:#555;margin-bottom:8px;line-height:1.6;">Paste your Strava profile embed URL. On Strava: go to your profile page → Share your activities → copy the src URL from the embed code (starts with https://www.strava.com/athletes/...).</div>
-        <input type="text" id="strava-input-${currentUser}" value="${u.stravaEmbed||''}" placeholder="https://www.strava.com/athletes/XXXXXXX/activity-summary/..." style="width:100%;padding:10px;background:#000;border:1px solid #333;border-radius:6px;color:#fff;font-size:12px;box-sizing:border-box;" />
-        <div style="display:flex;gap:10px;margin-top:10px;">
-          <button class="btn-admin" onclick="saveStrava('${currentUser}')">SAVE</button>
-          <button class="btn-outline" onclick="cancelStrava('${currentUser}')">CANCEL</button>
-        </div>
-      </div>
-    </div>
     `:''}
 
     ${isAdmin?`
       <div class="halo-card" style="margin-bottom:20px;">
         <div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:3px;color:#555;margin-bottom:14px;">ADMIN TOOLS</div>
         <div style="display:flex;gap:10px;flex-wrap:wrap;">
-          <button class="btn-admin" onclick="showTab('challenges');openModal('new-challenge-modal')">+ ANNOUNCE CHALLENGE</button>
+          <button class="btn-admin" onclick="showTab('challenges');openNewChallenge()">+ ANNOUNCE CHALLENGE</button>
           <button class="btn-admin" onclick="openModal('create-member-modal')">+ CREATE MEMBER</button>
           <button class="btn-admin" onclick="openPhilosophyEdit()">EDIT PHILOSOPHY</button>
           <button class="btn-outline" onclick="changeOwnPassword()">CHANGE MY PASSWORD</button>
@@ -1557,7 +1541,35 @@ async function submitLog(){
   }catch(e){alert('Connection error. Please try again.');}
 }
 
-// ══ NEW CHALLENGE ══
+// ══ NEW / EDIT CHALLENGE ══
+let editingChallengeId=null;
+
+function openNewChallenge(){
+  editingChallengeId=null;
+  document.getElementById('nc-modal-title').textContent='ANNOUNCE CHALLENGE';
+  document.getElementById('nc-submit-btn').textContent='ANNOUNCE';
+  document.getElementById('nc-title').value='';
+  document.getElementById('nc-type').value='ATC';
+  document.getElementById('nc-event').value='2400m';
+  document.getElementById('nc-desc').value='';
+  document.getElementById('nc-status').value='active';
+  openModal('new-challenge-modal');
+}
+
+function openEditChallenge(id){
+  const c=challenges.find(x=>x.id===id);
+  if(!c) return;
+  editingChallengeId=id;
+  document.getElementById('nc-modal-title').textContent='EDIT CHALLENGE';
+  document.getElementById('nc-submit-btn').textContent='SAVE';
+  document.getElementById('nc-title').value=c.title||'';
+  document.getElementById('nc-type').value=c.type||'ATC';
+  document.getElementById('nc-event').value=c.event||'none';
+  document.getElementById('nc-desc').value=c.desc&&c.desc!=='No description.'?c.desc:'';
+  document.getElementById('nc-status').value=c.status||'active';
+  openModal('new-challenge-modal');
+}
+
 async function submitChallenge(){
   const title=document.getElementById('nc-title').value.trim();
   const type=document.getElementById('nc-type').value;
@@ -1565,15 +1577,18 @@ async function submitChallenge(){
   const desc=document.getElementById('nc-desc').value.trim();
   const status=document.getElementById('nc-status').value;
   if(!title){alert('Please enter a title.');return;}
+  const isEdit=editingChallengeId!==null;
+  const payload={username:currentUser,password:sessionPassword,challenge:{title,type,event,desc:desc||'No description.',status}};
+  if(isEdit){ payload.action='edit'; payload.challengeId=editingChallengeId; }
+  else { payload.action='create'; }
   try{
-    const res=await fetch('/api/save-challenge',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:currentUser,password:sessionPassword,action:'create',challenge:{title,type,event,desc:desc||'No description.',status}})});
+    const res=await fetch('/api/save-challenge',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
     const data=await res.json();
     if(data.error){alert('Error saving challenge: '+data.error);return;}
     challenges=data.challenges;
     if(data.feed) feed=data.feed;
     closeModal('new-challenge-modal');
-    document.getElementById('nc-title').value='';
-    document.getElementById('nc-desc').value='';
+    editingChallengeId=null;
     renderAll();
     showTab('challenges');
   }catch(e){alert('Connection error. Please try again.');}
@@ -1688,28 +1703,6 @@ function cancelBio(key){
   if(disp) disp.style.display='block';
   const el=document.getElementById('bio-edit-'+key);
   if(el) el.style.display='none';
-}
-
-// ══ STRAVA FUNCTIONS ══
-function editStrava(key){
-  document.getElementById('strava-display-'+key).style.display='none';
-  document.getElementById('strava-edit-'+key).style.display='block';
-  document.getElementById('strava-input-'+key).value=users[key].stravaEmbed||'';
-}
-async function saveStrava(key){
-  const val=document.getElementById('strava-input-'+key).value.trim();
-  await fetch('/api/update-profile',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:currentUser,password:sessionPassword,targetUsername:key,field:'strava',value:val})});
-  users[key].stravaEmbed=val;
-  const disp=document.getElementById('strava-display-'+key);
-  if(disp) disp.innerHTML=val
-    ? `<iframe src="${val}" width="100%" height="160" frameborder="0" scrolling="no" style="border-radius:8px;"></iframe>`
-    : '<div style="font-size:13px;color:#444;">No Strava linked.</div>';
-  disp.style.display='block';
-  document.getElementById('strava-edit-'+key).style.display='none';
-}
-function cancelStrava(key){
-  document.getElementById('strava-display-'+key).style.display='block';
-  document.getElementById('strava-edit-'+key).style.display='none';
 }
 
 // ══ PHILOSOPHY EDIT (admin from profile page) ══

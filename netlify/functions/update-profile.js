@@ -17,8 +17,6 @@ exports.handler = async (event) => {
 
   if (field === 'bio') {
     u.bio = value || '';
-  } else if (field === 'strava') {
-    u.stravaEmbed = value || '';
   } else if (field === 'password') {
     if (!value || value.length < 6) return badReq('Password must be at least 6 characters');
     u.password = value;
